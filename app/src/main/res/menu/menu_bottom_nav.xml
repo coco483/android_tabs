@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/fragment_home"
+        android:id="@+id/tab1"
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:title="@string/tab1" />
     <item
-        android:id="@+id/fragment_search"
+        android:id="@+id/tab2"
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:title="@string/tab2"/>
     <item
-        android:id="@+id/fragment_favorite"
+        android:id="@+id/tab3"
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:title="@string/tab3"/>

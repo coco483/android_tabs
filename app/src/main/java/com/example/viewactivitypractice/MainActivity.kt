@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(){
 
         supportFragmentManager.beginTransaction().replace(R.id.container, tab1).commit()
 
-        val bottomnavigationView = findViewById(R.id.bottom_navigation) as NavigationBarView
+        val bottomnavigationView: NavigationBarView = findViewById(R.id.bottom_navigation)
         bottomnavigationView.setOnItemSelectedListener (
             object: NavigationBarView.OnItemSelectedListener {
                 override fun onNavigationItemSelected(item: MenuItem): Boolean {
