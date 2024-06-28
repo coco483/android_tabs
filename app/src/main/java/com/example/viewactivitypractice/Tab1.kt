@@ -52,6 +52,8 @@ class Tab1 : Fragment() {
 
 
     private fun dataInitialize() {
+        //val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
+        //numberDataArrayList = parseJsonToNumberDatas(jsonString)
         numberDataArrayList = arrayListOf<NumberDatas>()
 
         contactname = arrayOf(
