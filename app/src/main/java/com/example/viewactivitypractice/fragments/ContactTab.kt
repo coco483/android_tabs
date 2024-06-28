@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.adapters.ContactAdapter
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.datas.ContactData
@@ -50,7 +51,9 @@ class ContactTab : Fragment() {
     }
 
     private fun dataInitialize() {
-        val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
-        contactDataList = parseJsonToNumberDatas(jsonString)
+        //val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
+        //contactDataList = parseJsonToNumberDatas(jsonString)
+        var mydb = (activity as MainActivity).mydb
+        contactDataList = mydb.getAllContact()
     }
 }

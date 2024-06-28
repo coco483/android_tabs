@@ -1,6 +1,7 @@
 package com.example.viewactivitypractice
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,21 +16,24 @@ class MainActivity : AppCompatActivity(){
     private lateinit var tab1: Fragment
     private lateinit var tab2: Fragment
     private lateinit var tab3: Fragment
-
+    lateinit var mydb: DataBaseHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.bottom_navigating_home)
+        Log.d("MainActivity", "main activity created")
 
         tab1 = ContactTab()
         tab2 = GalleryTab()
         tab3 = DiaryTab()
-
+        mydb = DataBaseHandler(this)
+        //mydb.insertContact("김김김", "01032343544")
+        //mydb.insertContact("고양이", "01048483929")
         // 처음에는 tab 1 화면이 등장
         supportFragmentManager.beginTransaction().replace(R.id.container, tab1).commit()
 
-        // bottom navigation 클릭에 따라 fragment 변경
         val bottomnavigationView: NavigationBarView = findViewById(R.id.bottom_navigation)
+        // bottom navigation 클릭에 따라 fragment 변경
         bottomnavigationView.setOnItemSelectedListener (
             object: NavigationBarView.OnItemSelectedListener {
                 override fun onNavigationItemSelected(item: MenuItem): Boolean {
