@@ -1,33 +1,36 @@
-package com.example.viewactivitypractice
+package com.example.viewactivitypractice.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.io.File
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.viewactivitypractice.adapters.ContactAdapter
+import com.example.viewactivitypractice.R
+import com.example.viewactivitypractice.datas.ContactData
+import com.example.viewactivitypractice.parseJsonToNumberDatas
+import com.example.viewactivitypractice.readJsonFromAssets
 
 /**
  * A simple [Fragment] subclass.
  * Use the [Tab1.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+
 class Tab1 : Fragment() {
 
-    private lateinit var adapter: MyAdapter
+    private lateinit var adapter: ContactAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var contactDataList: ArrayList<ContactData>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +46,7 @@ class Tab1 : Fragment() {
         recyclerView = view.findViewById(R.id.numRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = MyAdapter(contactDataList)
+        recyclerView.adapter = ContactAdapter(contactDataList)
     }
 
     private fun dataInitialize() {
