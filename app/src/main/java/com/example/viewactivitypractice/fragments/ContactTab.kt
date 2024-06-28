@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.viewactivitypractice.MainActivity
-import com.example.viewactivitypractice.adapters.ContactAdapter
 import com.example.viewactivitypractice.R
+import com.example.viewactivitypractice.adapters.ContactAdapter
 import com.example.viewactivitypractice.datas.ContactData
-import com.example.viewactivitypractice.parseJsonToNumberDatas
-import com.example.viewactivitypractice.readJsonFromAssets
 
 /**
  * A simple [Fragment] subclass.
@@ -31,14 +31,17 @@ class ContactTab : Fragment() {
     private lateinit var adapter: ContactAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var contactDataList: ArrayList<ContactData>
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab1, container, false)
+        val view =  inflater.inflate(R.layout.fragment_tab1, container, false)
+        val add_btn = view.findViewById<Button>(R.id.add_contact_button)
+        add_btn.setOnClickListener{
+            parentFragmentManager .beginTransaction().replace(R.id.container, AddContactPage()).commit()
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +52,6 @@ class ContactTab : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = ContactAdapter(contactDataList)
     }
-
     private fun dataInitialize() {
         //val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
         //contactDataList = parseJsonToNumberDatas(jsonString)
