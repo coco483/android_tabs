@@ -25,9 +25,6 @@ class Tab1 : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var contactDataList: ArrayList<ContactData>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +46,5 @@ class Tab1 : Fragment() {
     private fun dataInitialize() {
         val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
         contactDataList = parseJsonToNumberDatas(jsonString)
-
     }
 }

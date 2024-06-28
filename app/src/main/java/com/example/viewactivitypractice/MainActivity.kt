@@ -25,8 +25,10 @@ class MainActivity : AppCompatActivity(){
         tab2 = Tab2()
         tab3 = Tab3()
 
+        // 처음에는 tab 1 화면이 등장
         supportFragmentManager.beginTransaction().replace(R.id.container, tab1).commit()
 
+        // bottom navigation 클릭에 따라 fragment 변경
         val bottomnavigationView: NavigationBarView = findViewById(R.id.bottom_navigation)
         bottomnavigationView.setOnItemSelectedListener (
             object: NavigationBarView.OnItemSelectedListener {

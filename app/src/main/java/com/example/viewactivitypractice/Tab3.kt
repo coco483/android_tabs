@@ -12,9 +12,6 @@ import androidx.fragment.app.Fragment
  * create an instance of this fragment.
  */
 class Tab3 : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
