@@ -30,9 +30,8 @@ class MainActivity : AppCompatActivity(){
         //mydb.insertContact("김김김", "01032343544")
         //mydb.insertContact("고양이", "01048483929")
         // 처음에는 tab 1 화면이 등장
-        supportFragmentManager.beginTransaction().replace(R.id.container, tab1).commit()
-
         val bottomnavigationView: NavigationBarView = findViewById(R.id.bottom_navigation)
+        supportFragmentManager.beginTransaction().replace(R.id.blank_container, tab1).commit()
         // bottom navigation 클릭에 따라 fragment 변경
         bottomnavigationView.setOnItemSelectedListener (
             object: NavigationBarView.OnItemSelectedListener {
@@ -46,7 +45,8 @@ class MainActivity : AppCompatActivity(){
                     selectedFragment?.let {
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(R.id.container, selectedFragment)
+                            .replace(R.id.blank_container, selectedFragment)
+                            //.addToBackStack(null)
                             .commit()
                         return true
                     }

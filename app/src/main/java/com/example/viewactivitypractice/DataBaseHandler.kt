@@ -29,6 +29,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         onCreate(db)
     }
     fun insertContact(name:String, phonenumber:String): Long {
+        Log.d("DBhandler", "insert contact $name, $phonenumber")
         val values = ContentValues().apply {
             put(COL_NAME, name)
             put(COL_PHONENUM, phonenumber)
@@ -48,6 +49,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_PHONENUM))
                 val contact = ContactData(name, phonenumber)
                 contactList.add(contact)
+                Log.d("DBread", "read $name, $phonenumber")
             } while (cursor.moveToNext())
         }
         cursor.close()

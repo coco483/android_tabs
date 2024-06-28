@@ -20,11 +20,6 @@ import com.example.viewactivitypractice.datas.ContactData
  * create an instance of this fragment.
  */
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 
 class ContactTab : Fragment() {
 
@@ -39,7 +34,7 @@ class ContactTab : Fragment() {
         val view =  inflater.inflate(R.layout.fragment_tab1, container, false)
         val add_btn = view.findViewById<Button>(R.id.add_contact_button)
         add_btn.setOnClickListener{
-            parentFragmentManager .beginTransaction().replace(R.id.container, AddContactPage()).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.blank_container, AddContactPage()).commit()
         }
         return view
     }

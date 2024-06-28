@@ -12,13 +12,13 @@ class ContactAdapter(private val numberList: ArrayList<ContactData>) :
     RecyclerView.Adapter<ContactAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView =
+        var itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.number_items, parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = numberList[position]
+        var currentItem = numberList[position]
         holder.name.text = currentItem.name
         holder.phoneNum.text = currentItem.phonenumber
     }
