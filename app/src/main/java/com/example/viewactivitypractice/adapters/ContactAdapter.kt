@@ -1,13 +1,15 @@
-package com.example.viewactivitypractice
+package com.example.viewactivitypractice.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.viewactivitypractice.R
+import com.example.viewactivitypractice.datas.ContactData
 
-class MyAdapter(private val numberList: ArrayList<ContactData>) :
-    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class ContactAdapter(private val numberList: ArrayList<ContactData>) :
+    RecyclerView.Adapter<ContactAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =

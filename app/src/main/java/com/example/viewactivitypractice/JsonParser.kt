@@ -1,6 +1,7 @@
 package com.example.viewactivitypractice
 
 import android.content.Context
+import com.example.viewactivitypractice.datas.ContactData
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 

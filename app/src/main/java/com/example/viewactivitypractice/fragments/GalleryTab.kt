@@ -1,17 +1,18 @@
-package com.example.viewactivitypractice
+package com.example.viewactivitypractice.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.viewactivitypractice.R
 
 /**
  * A simple [Fragment] subclass.
- * Use the [Tab2.newInstance] factory method to
+ * Use the [GalleryTab.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Tab2 : Fragment() {
+class GalleryTab : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.viewactivitypractice.fragments.ContactTab
+import com.example.viewactivitypractice.fragments.GalleryTab
+import com.example.viewactivitypractice.fragments.DiaryTab
 import com.google.android.material.navigation.NavigationBarView
 
 class MainActivity : AppCompatActivity(){
@@ -21,9 +21,9 @@ class MainActivity : AppCompatActivity(){
         enableEdgeToEdge()
         setContentView(R.layout.bottom_navigating_home)
 
-        tab1 = Tab1()
-        tab2 = Tab2()
-        tab3 = Tab3()
+        tab1 = ContactTab()
+        tab2 = GalleryTab()
+        tab3 = DiaryTab()
 
         // 처음에는 tab 1 화면이 등장
         supportFragmentManager.beginTransaction().replace(R.id.container, tab1).commit()
