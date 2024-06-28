@@ -15,7 +15,7 @@ import com.example.viewactivitypractice.readJsonFromAssets
 
 /**
  * A simple [Fragment] subclass.
- * Use the [Tab1.newInstance] factory method to
+ * Use the [ContactTab.newInstance] factory method to
  * create an instance of this fragment.
  */
 
@@ -25,7 +25,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class Tab1 : Fragment() {
+class ContactTab : Fragment() {
 
     private lateinit var adapter: ContactAdapter
     private lateinit var recyclerView: RecyclerView

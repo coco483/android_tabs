@@ -4,7 +4,7 @@
     android:id="@+id/tab3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Tab1">
+    tools:context=".fragments.ContactTab">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
