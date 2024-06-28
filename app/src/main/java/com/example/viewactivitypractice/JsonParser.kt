@@ -10,5 +10,5 @@ fun readJsonFromAssets(context: Context, fileName: String): String {
 
 fun parseJsonToNumberDatas(jsonString: String): ArrayList<NumberDatas> {
     val gson = Gson()
-    return gson.fromJson(jsonString, object : TypeToken<ArrayList<NumberDatas>>() {}.type)
+    return  gson.fromJson(jsonString, object : TypeToken<ArrayList<NumberDatas>>(){}.type)
 }

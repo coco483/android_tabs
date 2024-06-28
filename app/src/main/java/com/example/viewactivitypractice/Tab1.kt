@@ -52,40 +52,9 @@ class Tab1 : Fragment() {
 
 
     private fun dataInitialize() {
-        //val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
-        //numberDataArrayList = parseJsonToNumberDatas(jsonString)
-        numberDataArrayList = arrayListOf<NumberDatas>()
+        val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
+        numberDataArrayList = parseJsonToNumberDatas(jsonString)
+        //numberDataArrayList = arrayListOf<NumberDatas>()
 
-        contactname = arrayOf(
-            getString(R.string.contact_name_1),
-            getString(R.string.contact_name_2),
-            getString(R.string.contact_name_3),
-            getString(R.string.contact_name_4),
-            getString(R.string.contact_name_5),
-            getString(R.string.contact_name_6),
-            getString(R.string.contact_name_7),
-            getString(R.string.contact_name_8),
-            getString(R.string.contact_name_9),
-            getString(R.string.contact_name_10),
-        )
-
-        number = arrayOf(
-            getString(R.string.contact_number_1),
-            getString(R.string.contact_number_2),
-            getString(R.string.contact_number_3),
-            getString(R.string.contact_number_4),
-            getString(R.string.contact_number_5),
-            getString(R.string.contact_number_6),
-            getString(R.string.contact_number_7),
-            getString(R.string.contact_number_8),
-            getString(R.string.contact_number_9),
-            getString(R.string.contact_number_10),
-        )
-
-        for (i in contactname.indices) {
-
-            val numberData = NumberDatas(contactname[i], number[i])
-            numberDataArrayList.add(numberData)
-        }
     }
 }
