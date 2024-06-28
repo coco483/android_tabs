@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,17 +44,14 @@ class Tab1 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
-        val layoutManager = LinearLayoutManager(context)
         recyclerView = view.findViewById(R.id.numRecycler)
-        recyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        adapter = MyAdapter(numberDataArrayList)
-        recyclerView.adapter = adapter
+        recyclerView.adapter = MyAdapter(numberDataArrayList)
     }
 
 
     private fun dataInitialize() {
-
         numberDataArrayList = arrayListOf<NumberDatas>()
 
         contactname = arrayOf(

@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.bottom_navigating_home)
-        replaceFragment(Tab1())
 
         tab1 = Tab1()
         tab2 = Tab2()
