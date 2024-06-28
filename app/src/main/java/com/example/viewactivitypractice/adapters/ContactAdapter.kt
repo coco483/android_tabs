@@ -20,7 +20,17 @@ class ContactAdapter(private val numberList: ArrayList<ContactData>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var currentItem = numberList[position]
         holder.name.text = currentItem.name
-        holder.phoneNum.text = currentItem.phonenumber
+        holder.phoneNum.text = formatPhoneNumber(currentItem.phonenumber)
+    }
+    fun formatPhoneNumber(input: String): String {
+        // Ensure the input string is exactly 11 digits long
+        if (input.length != 11 || !input.all { it.isDigit() }) {
+            throw IllegalArgumentException("Input must be a string of exactly 11 digits")
+        }
+        val part1 = input.substring(0, 3)
+        val part2 = input.substring(3, 7)
+        val part3 = input.substring(7, 11)
+        return "$part1-$part2-$part3"
     }
 
     override fun getItemCount(): Int {
