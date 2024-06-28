@@ -23,11 +23,7 @@ class Tab1 : Fragment() {
 
     private lateinit var adapter: MyAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var numberDataArrayList: ArrayList<NumberDatas>
-
-    lateinit var contactname: Array<String>
-    lateinit var number: Array<String>
-    lateinit var numberDatas: Array<String>
+    private lateinit var contactDataList: ArrayList<ContactData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,14 +43,12 @@ class Tab1 : Fragment() {
         recyclerView = view.findViewById(R.id.numRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = MyAdapter(numberDataArrayList)
+        recyclerView.adapter = MyAdapter(contactDataList)
     }
-
 
     private fun dataInitialize() {
         val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
-        numberDataArrayList = parseJsonToNumberDatas(jsonString)
-        //numberDataArrayList = arrayListOf<NumberDatas>()
+        contactDataList = parseJsonToNumberDatas(jsonString)
 
     }
 }

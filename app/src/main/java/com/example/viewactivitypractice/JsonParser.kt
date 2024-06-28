@@ -8,7 +8,7 @@ fun readJsonFromAssets(context: Context, fileName: String): String {
     return context.assets.open(fileName).bufferedReader().use { it.readText() }
 }
 
-fun parseJsonToNumberDatas(jsonString: String): ArrayList<NumberDatas> {
+fun parseJsonToNumberDatas(jsonString: String): ArrayList<ContactData> {
     val gson = Gson()
-    return  gson.fromJson(jsonString, object : TypeToken<ArrayList<NumberDatas>>(){}.type)
+    return  gson.fromJson(jsonString, object : TypeToken<ArrayList<ContactData>>(){}.type)
 }

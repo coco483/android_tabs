@@ -1,6 +1,6 @@
 [
-{"contactname": "김문정", "number": "010-1234-5678"},
-{"contactname": "송종찬", "number": "010-2345-6789"},
-{"contactname": "박민수", "number": "010-3456-7890"},
-{"contactname": "최수지", "number": "010-4567-8901"}
+{"name": "김문정", "phonenumber": "010-1234-5678"},
+{"name": "송종찬", "phonenumber": "010-2345-6789"},
+{"name": "박민수", "phonenumber": "010-3456-7890"},
+{"name": "최수지", "phonenumber": "010-4567-8901"}
 ]

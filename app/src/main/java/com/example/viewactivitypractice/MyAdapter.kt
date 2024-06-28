@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val numberList: ArrayList<NumberDatas>) :
+class MyAdapter(private val numberList: ArrayList<ContactData>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -17,8 +17,8 @@ class MyAdapter(private val numberList: ArrayList<NumberDatas>) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = numberList[position]
-        holder.phoneName.text = currentItem.contactname
-        holder.phoneNum.text = currentItem.number
+        holder.name.text = currentItem.name
+        holder.phoneNum.text = currentItem.phonenumber
     }
 
     override fun getItemCount(): Int {
@@ -26,7 +26,7 @@ class MyAdapter(private val numberList: ArrayList<NumberDatas>) :
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val phoneName : TextView = itemView.findViewById(R.id.item_name)
+        val name : TextView = itemView.findViewById(R.id.item_name)
         val phoneNum : TextView = itemView.findViewById(R.id.item_num)
     }
 }
