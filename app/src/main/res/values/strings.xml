@@ -5,4 +5,35 @@
     <string name="tab1">연락처</string>
     <string name="tab2">갤러리</string>
     <string name="tab3">설정</string>
+
+    <!-- 임시 저장용 번호 및 이름, 추후 json으로 변경 -->
+    <string name="contact_name_1">김철수</string>
+    <string name="contact_number_1">010-1234-5678</string>
+
+    <string name="contact_name_2">이영희</string>
+    <string name="contact_number_2">010-2345-6789</string>
+
+    <string name="contact_name_3">박민준</string>
+    <string name="contact_number_3">010-3456-7890</string>
+
+    <string name="contact_name_4">최지우</string>
+    <string name="contact_number_4">010-4567-8901</string>
+
+    <string name="contact_name_5">정하은</string>
+    <string name="contact_number_5">010-5678-9012</string>
+
+    <string name="contact_name_6">강동원</string>
+    <string name="contact_number_6">010-6789-0123</string>
+
+    <string name="contact_name_7">조윤아</string>
+    <string name="contact_number_7">010-7890-1234</string>
+
+    <string name="contact_name_8">홍길동</string>
+    <string name="contact_number_8">010-8901-2345</string>
+
+    <string name="contact_name_9">유지민</string>
+    <string name="contact_number_9">010-9012-3456</string>
+
+    <string name="contact_name_10">한지민</string>
+    <string name="contact_number_10">010-0123-4567</string>
 </resources>

@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.bottom_navigating_home)
+        replaceFragment(Tab1())
 
         tab1 = Tab1()
         tab2 = Tab2()
@@ -49,4 +50,15 @@ class MainActivity : AppCompatActivity(){
             }
         )
     }
-}
+
+    // 요놈의 위치를 잘 찾아보자
+    private fun replaceFragment(tab1: Fragment) {
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        // 리플레이스할 xml id가 탭1맞나? bottom_navigation container
+        fragmentTransaction.replace(R.id.tab1, tab1)
+        fragmentTransaction.commit()
+    }
+
+    }
