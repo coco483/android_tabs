@@ -45,9 +45,10 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor.moveToFirst()) {
             do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME))
                 val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_PHONENUM))
-                val contact = ContactData(name, phonenumber)
+                val contact = ContactData(id, name, phonenumber)
                 contactList.add(contact)
                 Log.d("DBread", "read $name, $phonenumber")
             } while (cursor.moveToNext())
@@ -66,10 +67,12 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     // 연락처 편집
     fun updateContact(id: Int, name: String, phoneNumber: String) {
         val db = this.writableDatabase
-        val contentValues = ContentValues().apply {
-            put(COL_NAME, name)
-            put(COL_PHONENUM, phoneNumber)
-        }
+        Log.d("updateDB", "id: $id, name: $name, num: $phoneNumber")
+        val contentValues = ContentValues()
+        //contentValues.put(COL_ID, id)
+        contentValues.put(COL_NAME, name)
+        contentValues.put(COL_PHONENUM, phoneNumber)
+
         db.update(CONTACT_TABLE_NAME, contentValues, "id = ?", arrayOf(id.toString()))
         db.close()
     }

@@ -20,7 +20,7 @@ class ContactDetailPage : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            contactId = it.getInt("COL_ID", -1)
+            contactId = it.getInt("CONTACT_ID")
             Log.d("ContactDetail", "id: $contactId")
         }
     }

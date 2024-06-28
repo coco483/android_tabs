@@ -1,6 +1,7 @@
 package com.example.viewactivitypractice.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,7 @@ class ContactTab : Fragment() {
                 arguments = Bundle().apply {
                     putInt("CONTACT_ID", contact.id)  // 가정: ContactData에 id 필드가 있다고 가정
                     putString("EXTRA_CONTACT_NAME", contact.name)
-                    putString("EXTRA_CONTACT_PHONE", contact.phonenumber)
+                    putString("EXTRA_CONTACT_PHONE",contact.phonenumber)
                 }
             }
             parentFragmentManager.beginTransaction()

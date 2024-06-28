@@ -5,7 +5,8 @@ class ContactData() {
     var name : String = ""
     var phonenumber: String = ""
 
-    constructor(name:String, phonenumber: String) : this() {
+    constructor(id:Int, name:String, phonenumber: String) : this() {
+        this.id = id
         this.name = name
         this.phonenumber = phonenumber
     }
