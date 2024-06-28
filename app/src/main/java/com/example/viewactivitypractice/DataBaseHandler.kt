@@ -55,4 +55,22 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         return contactList
     }
+
+    // 연락처 삭제
+    fun deleteContactById(contactId: Int) {
+        val db = this.writableDatabase
+        db.delete(CONTACT_TABLE_NAME, "id = ?", arrayOf(contactId.toString()))
+        db.close()
+    }
+
+    // 연락처 편집
+    fun updateContact(id: Int, name: String, phoneNumber: String) {
+        val db = this.writableDatabase
+        val contentValues = ContentValues().apply {
+            put(COL_NAME, name)
+            put(COL_PHONENUM, phoneNumber)
+        }
+        db.update(CONTACT_TABLE_NAME, contentValues, "id = ?", arrayOf(id.toString()))
+        db.close()
+    }
 }

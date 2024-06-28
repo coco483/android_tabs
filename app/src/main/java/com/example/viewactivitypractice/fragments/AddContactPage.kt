@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
-import kotlin.contracts.Effect
 
 class AddContactPage: Fragment() {
     override fun onCreateView(
@@ -20,8 +18,8 @@ class AddContactPage: Fragment() {
         // Inflate the layout for this fragment
         var mydb = (activity as MainActivity).mydb
         val view =  inflater.inflate(R.layout.add_contact_page, container, false)
-        val confirm_btn = view.findViewById<Button>(R.id.confirm_btn)
-        val cancel_btn = view.findViewById<Button>(R.id.cancel_btn)
+        val confirm_btn = view.findViewById<Button>(R.id.edit_btn)
+        val cancel_btn = view.findViewById<Button>(R.id.delete_btn)
 
         confirm_btn.setOnClickListener{
             var name = view.findViewById<EditText>(R.id.name_ET).text.toString()
