@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity(){
         tab1 = ContactTab()
         tab2 = GalleryTab()
         tab3 = PostTab()
-
         mydb = DataBaseHandler(this)
         //mydb.insertContact("김김김", "01032343544")
         //mydb.insertContact("고양이", "01048483929")

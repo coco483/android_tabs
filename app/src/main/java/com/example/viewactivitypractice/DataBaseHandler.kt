@@ -4,10 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.viewactivitypractice.datas.ContactData
+import com.example.viewactivitypractice.datas.ImageData
 import com.example.viewactivitypractice.datas.PostData
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -17,7 +19,7 @@ private const val DATABASE_NAME = "MyDB"
 // for Contact
 private const val CONTACT_TABLE_NAME = "Contacts"
 private const val COL_NAME = "name"
-private const val COL_ID = "id"
+private const val COL_CONTACT_ID = "id"
 private const val COL_PHONENUM = "phonenumber"
 
 // for Gallery
@@ -25,7 +27,7 @@ private const val IMG_TABLE_NAME = "Images"
 private const val COL_IMG_ID = "id"
 private const val COL_IMG = "image"
 // for Post
-private const val POST_TABLE_NAME = "Post"
+private const val POST_TABLE_NAME = "Posts"
 private const val COL_POST_ID = "id"
 private const val COL_CONTENT = "content"
 private const val COL_DATE = "date"
@@ -39,23 +41,22 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         createPostTable(db)
     }
 
-    // 컨택트 테이블
+    // 컨택트 테이블 생성
     private fun createContactTable(db: SQLiteDatabase?) {
         Log.d("ContactDBhandler", "contact db create table")
         val createContactTableQuery = ("CREATE TABLE $CONTACT_TABLE_NAME (" +
-                "$COL_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
+                "$COL_CONTACT_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
                 "$COL_NAME VARCHAR, " +
                 "$COL_PHONENUM VARCHAR(11))")
-        db?.execSQL(createContactTableQuery)
+        db!!.execSQL(createContactTableQuery)
     }
-
     // 이미지 테이블 생성
     private fun createImgTable(db: SQLiteDatabase?){
         Log.d("ImgDBhandler", "img db create table")
         val createImgTableQuery = ("CREATE TABLE $IMG_TABLE_NAME (" +
                 "$COL_IMG_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$COL_IMG BLOB)")
-        db?.execSQL(createImgTableQuery)
+        db!!.execSQL(createImgTableQuery)
     }
 
     // 포스트 테이블 생성
@@ -70,7 +71,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 $COL_IMAGE_ID INTEGER
             );
         """.trimIndent()
-        db?.execSQL(createPostTableQuery)
+        db!!.execSQL(createPostTableQuery)
     }
 
 
@@ -82,9 +83,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         }
     }
 
-    // CRUD
     // Contant
-    // 만들기
     fun insertContact(name:String, phonenumber:String): Long {
         Log.d("DBhandler", "insert contact $name, $phonenumber")
         val values = ContentValues().apply {
@@ -102,7 +101,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID))
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CONTACT_ID))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME))
                 val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_PHONENUM))
                 val contact = ContactData(id, name, phonenumber)
@@ -133,6 +132,35 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         db.update(CONTACT_TABLE_NAME, contentValues, "id = ?", arrayOf(id.toString()))
         db.close()
     }
+
+    // 이미지 추가하기
+    fun insertImg(img: Bitmap?): Long {
+        if (img == null) return 0
+        Log.d("ImgDBhandler", "insert image")
+        val values = ContentValues()
+        values.put(COL_IMG, bitmapToByteArray(img))
+        val db = writableDatabase
+        return db.insert(IMG_TABLE_NAME, null, values)
+    }
+    fun getAllImg(): ArrayList<ImageData>{
+        val imgDataList = ArrayList<ImageData>()
+        val db = readableDatabase
+        val query = ("SELECT * FROM $IMG_TABLE_NAME")
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMG_ID))
+                Log.d("ImgDBhanlder", "read $id image!")
+                val img = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_IMG))
+                val imgData = ImageData(id, byteArrayToBitmap(img))
+                imgDataList.add(imgData)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return imgDataList
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun insertPost(content: String): Long{
