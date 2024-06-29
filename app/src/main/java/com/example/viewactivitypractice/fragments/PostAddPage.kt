@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
+import com.example.viewactivitypractice.datas.PostData
 
 /**
  * A simple [Fragment] subclass.
@@ -37,7 +38,7 @@ class PostAddPage : Fragment() {
             if (content.length == 0) {
                 Toast.makeText(requireContext(), "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
             } else {
-                myDB.insertPost(content)
+                myDB.insertPost(PostData(-1, content, ""))
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
             }
         }

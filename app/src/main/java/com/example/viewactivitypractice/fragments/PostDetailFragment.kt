@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
+import com.example.viewactivitypractice.datas.PostData
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,7 +50,7 @@ class PostDetailFragment : Fragment() {
             if (newContent == "") {
                 Toast.makeText(requireContext(), "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
             } else {
-                mydb.updatePost(postId, newContent) // 연락처 업데이트
+                mydb.updatePost(PostData(postId, newContent, "")) // 연락처 업데이트
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab())
                     .commit() // 변경 사항 반영
             }

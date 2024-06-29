@@ -163,12 +163,12 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun insertPost(content: String): Long{
-        Log.d("PostDBHandler", "insert contact $content")
+    fun insertPost(post: PostData): Long{
+        Log.d("PostDBHandler", "insert contact ${post.content}")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
         val values = ContentValues().apply {
-            put(COL_CONTENT, content)
+            put(COL_CONTENT, post.content)
             put(COL_DATE, current)
         }
         val db = writableDatabase
@@ -176,15 +176,15 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun updatePost(id: Int, content: String) {
+    fun updatePost(post:PostData) {
         val db = this.writableDatabase
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
         val postValues = ContentValues()
-        postValues.put(COL_CONTENT, content)
+        postValues.put(COL_CONTENT, post.content)
         postValues.put(COL_DATE, current)
 
-        db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(id.toString()))
+        db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(post.id.toString()))
         db.close()
     }
     // 포스트
