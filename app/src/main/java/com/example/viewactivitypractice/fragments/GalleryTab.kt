@@ -1,5 +1,6 @@
 package com.example.viewactivitypractice.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.adapters.ImageAdapter
@@ -28,9 +28,9 @@ class GalleryTab : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_tab2, container, false)
-        val addBtn = view.findViewById<Button>(R.id.pick_img_button)
-        addBtn.setOnClickListener{
-            //parentFragmentManager.beginTransaction().replace(R.id.blank_container, CameraPage()).commit()
+        val pickImgBtn = view.findViewById<Button>(R.id.pick_img_button)
+        pickImgBtn.setOnClickListener{
+            //val pickupImgFromGallery = Intent(Intent.action)
         }
         return view
     }
