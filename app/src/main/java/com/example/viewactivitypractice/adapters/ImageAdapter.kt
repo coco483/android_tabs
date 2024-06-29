@@ -1,6 +1,5 @@
 package com.example.viewactivitypractice.adapters
 
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ class ImageAdapter(private val imgList: ArrayList<ImageData>)
     : RecyclerView.Adapter<ImageAdapter.ImgViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImgViewHolder {
         var imgView =
-            LayoutInflater.from(parent.context).inflate(R.layout.img_items, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.gallery_img_items, parent, false)
         return ImgViewHolder(imgView)
     }
     override fun onBindViewHolder(holder: ImgViewHolder, position: Int) {

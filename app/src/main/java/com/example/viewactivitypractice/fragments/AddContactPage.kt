@@ -18,7 +18,7 @@ class AddContactPage: Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val myDB = (activity as MainActivity).mydb
-        val view =  inflater.inflate(R.layout.add_contact_page, container, false)
+        val view =  inflater.inflate(R.layout.contact_add_page, container, false)
         val confirmBtn = view.findViewById<Button>(R.id.confirm_btn)
         val cancelBtn = view.findViewById<Button>(R.id.cancel_btn)
 
