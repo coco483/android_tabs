@@ -4,10 +4,13 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.viewactivitypractice.datas.ContactData
 import com.example.viewactivitypractice.datas.PostData
-
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 private const val DATABASE_NAME = "MyDB"
 
@@ -18,10 +21,13 @@ private const val COL_ID = "id"
 private const val COL_PHONENUM = "phonenumber"
 
 // for Gallery
-
+// for Gallery
+private const val IMG_TABLE_NAME = "Images"
+private const val COL_IMG_ID = "id"
+private const val COL_IMG = "image"
 // for Post
 private const val POST_TABLE_NAME = "Post"
-private const val COL_POST_ID = "post_id"
+private const val COL_POST_ID = "id"
 private const val COL_CONTENT = "main_text"
 private const val COL_DATE = "date"
 private const val COL_TAGGED_ID = "tagged_id"
@@ -30,6 +36,7 @@ private const val COL_IMAGE_ID = "image_id"
 class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, 1){
     override fun onCreate(db: SQLiteDatabase) {
         createContactTable(db)
+        createImgTable(db)
         createPostTable(db)
     }
 
@@ -41,6 +48,14 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 "$COL_NAME VARCHAR, " +
                 "$COL_PHONENUM VARCHAR(11))")
         db?.execSQL(createContactTableQuery)
+    }
+    // 이미지 테이블 생성
+    private fun createImgTable(db: SQLiteDatabase?){
+        Log.d("ImgDBhandler", "img db create table")
+        val createImgTableQuery = ("CREATE TABLE $IMG_TABLE_NAME (" +
+                "$COL_IMG_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "$COL_IMG BLOB)")
+        db?.execSQL(createImgTableQuery)
     }
 
     // 포스트 테이블 생성
@@ -119,7 +134,31 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun insertPost(content: String): Long{
+        Log.d("PostDBHandler", "insert contact $content")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val current = LocalDateTime.now().format(formatter)
+        val values = ContentValues().apply {
+            put(COL_CONTENT, content)
+            put(COL_DATE, current)
+        }
+        val db = writableDatabase
+        return db.insert(POST_TABLE_NAME, null, values)
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updatePost(id: Int, content: String) {
+        val db = this.writableDatabase
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val current = LocalDateTime.now().format(formatter)
+        val postValues = ContentValues()
+        postValues.put(COL_CONTENT, content)
+        postValues.put(COL_DATE, current)
+
+        db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(id.toString()))
+        db.close()
+    }
     // 포스트
     fun getAllPost() :ArrayList<PostData>{
 
@@ -140,10 +179,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 postList.add(post)
             } while (cursor.moveToNext())
         }
-
         cursor.close()
         db.close()
-
         return postList
     }
 

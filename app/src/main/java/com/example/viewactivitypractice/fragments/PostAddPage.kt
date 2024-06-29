@@ -1,5 +1,6 @@
 package com.example.viewactivitypractice.fragments
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 
@@ -19,6 +21,7 @@ import com.example.viewactivitypractice.R
 class PostAddPage : Fragment() {
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,21 +32,18 @@ class PostAddPage : Fragment() {
         val uploadBtn = view.findViewById<Button>(R.id.post_upload_btn)
         val cancelBtn = view.findViewById<Button>(R.id.post_cancel_btn)
 
-        /uploadBtn.setOnClickListener{
+        uploadBtn.setOnClickListener{
             val content = view.findViewById<EditText>(R.id.content_ET).text.toString()
-            val phonenum = view.findViewById<EditText>(R.id.)text.toString()
-            if (phonenum.length != 11) {
-                Toast.makeText(requireContext(), "전화번호 11자리를 모두 입력해 주세요", Toast.LENGTH_SHORT).show()
-            } else if (name == ""){
-                Toast.makeText(requireContext(), "이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            if (content.length == 0) {
+                Toast.makeText(requireContext(), "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
             } else {
-                myDB.insertContact(name, phonenum)
-                parentFragmentManager.beginTransaction().replace(R.id.blank_container, ContactTab()).commit()
+                myDB.insertPost(content)
+                parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
             }
         }
         cancelBtn.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.blank_container, ContactTab()).commit()
-        }*/
+            parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
+        }
         return view
     }
 
