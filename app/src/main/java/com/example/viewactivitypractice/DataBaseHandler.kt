@@ -5,13 +5,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.viewactivitypractice.datas.ContactData
 import com.example.viewactivitypractice.datas.ImageData
-import com.example.viewactivitypractice.datas.PostData
-import java.io.ByteArrayOutputStream
-
 
 private const val DATABASE_NAME = "MyDB"
 
