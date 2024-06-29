@@ -1,13 +1,11 @@
 package com.example.viewactivitypractice.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.viewactivitypractice.MainActivity
@@ -32,7 +30,7 @@ class ContactTab : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_tab1, container, false)
+        val view =  inflater.inflate(R.layout.contact_tab_fragment, container, false)
         val add_btn = view.findViewById<Button>(R.id.add_contact_button)
         add_btn.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, AddContactPage()).commit()

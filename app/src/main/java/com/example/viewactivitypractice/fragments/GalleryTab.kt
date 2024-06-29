@@ -27,7 +27,7 @@ class GalleryTab : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_tab2, container, false)
+        val view =  inflater.inflate(R.layout.gallery_tab_fragment, container, false)
         val addBtn = view.findViewById<Button>(R.id.pick_img_button)
         addBtn.setOnClickListener{
             //parentFragmentManager.beginTransaction().replace(R.id.blank_container, CameraPage()).commit()

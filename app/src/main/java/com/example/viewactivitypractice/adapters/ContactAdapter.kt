@@ -13,7 +13,7 @@ class ContactAdapter(private val numberList: ArrayList<ContactData>, private val
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         var itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.number_items, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.contact_items, parent, false)
         return ContactViewHolder(itemView, onClick)
     }
 
@@ -23,7 +23,7 @@ class ContactAdapter(private val numberList: ArrayList<ContactData>, private val
         holder.name.text = currentItem.name
         holder.phoneNum.text = formatPhoneNumber(currentItem.phonenumber)
     }
-    fun formatPhoneNumber(input: String): String {
+    private fun formatPhoneNumber(input: String): String {
         // Ensure the input string is exactly 11 digits long
         if (input.length != 11 || !input.all { it.isDigit() }) {
             throw IllegalArgumentException("Input must be a string of exactly 11 digits")

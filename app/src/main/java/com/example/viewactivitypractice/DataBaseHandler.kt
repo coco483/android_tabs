@@ -6,28 +6,69 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.example.viewactivitypractice.datas.ContactData
+import com.example.viewactivitypractice.datas.PostData
 
-val DATABASE_NAME = "MyDB"
-val CONTACT_TABLE_NAME = "Contacts"
-val COL_NAME = "name"
-val COL_ID = "id"
-val COL_PHONENUM = "phonenumber"
+
+private const val DATABASE_NAME = "MyDB"
+
+// for Contact
+private const val CONTACT_TABLE_NAME = "Contacts"
+private const val COL_NAME = "name"
+private const val COL_ID = "id"
+private const val COL_PHONENUM = "phonenumber"
+
+// for Gallery
+
+// for Post
+private const val POST_TABLE_NAME = "Post"
+private const val COL_POST_ID = "post_id"
+private const val COL_CONTENT = "main_text"
+private const val COL_DATE = "date"
+private const val COL_TAGGED_ID = "tagged_id"
+private const val COL_IMAGE_ID = "image_id"
 
 class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, 1){
-    override fun onCreate(db: SQLiteDatabase?) {
-        Log.d("DBhandler", "db create table")
-        val createTableQuery = ("CREATE TABLE $CONTACT_TABLE_NAME ("+
-                "$COL_ID INTEGER PRIMARY KEY  AUTOINCREMENT, "+
-                "$COL_NAME VARCHAR, "+
-                "$COL_PHONENUM VARCHAR(11))")
-        db?.execSQL(createTableQuery)
+    override fun onCreate(db: SQLiteDatabase) {
+        createContactTable(db)
+        createPostTable(db)
+
     }
+
+    // 컨택트 테이블
+    private fun createContactTable(db: SQLiteDatabase?) {
+        Log.d("ContactDBhandler", "contact db create table")
+        val createContactTableQuery = ("CREATE TABLE $CONTACT_TABLE_NAME (" +
+                "$COL_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
+                "$COL_NAME VARCHAR, " +
+                "$COL_PHONENUM VARCHAR(11))")
+        db?.execSQL(createContactTableQuery)
+    }
+
+    // 포스트 테이블 생성
+    private fun createPostTable(db: SQLiteDatabase?) {
+        Log.d("PostDBhandler", "post db create table")
+        val createPostTableQuery = """
+            CREATE TABLE $POST_TABLE_NAME (
+                $COL_POST_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COL_CONTENT TEXT,
+                $COL_DATE TEXT,
+                $COL_TAGGED_ID INTEGER,
+                $COL_IMAGE_ID INTEGER
+            );
+        """.trimIndent()
+        db?.execSQL(createPostTableQuery)
+    }
+
 
     override fun onUpgrade(db: SQLiteDatabase?, oldeversion: Int, newversion: Int) {
         val dropTableQuery = "DROP TABLE IF EXISTS $CONTACT_TABLE_NAME"
         db?.execSQL(dropTableQuery)
-        onCreate(db)
+        db?.let {
+            onCreate(it)
+        }
     }
+
+    // Contant
     fun insertContact(name:String, phonenumber:String): Long {
         Log.d("DBhandler", "insert contact $name, $phonenumber")
         val values = ContentValues().apply {
@@ -75,5 +116,41 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         db.update(CONTACT_TABLE_NAME, contentValues, "id = ?", arrayOf(id.toString()))
         db.close()
+    }
+
+
+    // 포스트
+    fun getAllPost() :ArrayList<PostData>{
+
+        val postList = ArrayList<PostData>()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $POST_TABLE_NAME"
+        val cursor = db.rawQuery(selectQuery, null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val postId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_ID))
+                val content = cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT))
+                val date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE))
+                val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAGGED_ID))
+                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMAGE_ID))
+
+                val post = PostData(postId, content, date, taggedId.takeIf { it != 0 }, imageId.takeIf { it != 0 })
+                postList.add(post)
+            } while (cursor.moveToNext())
+        }
+
+        /**
+         * data class PostData (
+         *     var id : Int = 0,
+         *     var content: String = "",
+         *     var date: String = "",
+         *     val tagsId: Int = 0,
+         *     val imageId: Int = 0
+         */
+        cursor.close()
+        db.close()
+
+        return postList
     }
 }
