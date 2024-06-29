@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/content_ET"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <EditText
+        android:id="@+id/content_ET"
+        android:layout_width="350dp"
+        android:layout_height="230dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <EditText
+        android:id="@+id/tag_ET"
+        android:layout_width="350dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="tag"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_ET" />
+
+    <Button
+        android:id="@+id/post_upload_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Upload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/post_cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="169dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:text="YYYY/MM/DD HH:MM:SS"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/post_upload_btn"
+        app:layout_constraintStart_toEndOf="@+id/post_cancel_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

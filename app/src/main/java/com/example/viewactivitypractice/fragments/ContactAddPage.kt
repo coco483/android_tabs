@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 
-class AddContactPage: Fragment() {
+class ContactAddPage: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

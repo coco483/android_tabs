@@ -33,7 +33,7 @@ class ContactTab : Fragment() {
         val view =  inflater.inflate(R.layout.contact_tab_fragment, container, false)
         val add_btn = view.findViewById<Button>(R.id.add_contact_button)
         add_btn.setOnClickListener{
-            parentFragmentManager.beginTransaction().replace(R.id.blank_container, AddContactPage()).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.blank_container, ContactAddPage()).commit()
         }
         return view
     }

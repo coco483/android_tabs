@@ -8,11 +8,9 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.adapters.PostAdapter
-import com.example.viewactivitypractice.datas.ContactData
 import com.example.viewactivitypractice.datas.PostData
 
 /**
@@ -22,7 +20,6 @@ import com.example.viewactivitypractice.datas.PostData
  */
 class PostTab : Fragment() {
 
-    private lateinit var adapter: PostAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var postDataList: ArrayList<PostData>
 
@@ -32,9 +29,9 @@ class PostTab : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.post_tab_fragment, container, false)
-        val postAddBtn = view.findViewById<Button>(R.id.post_addBtn)
+        val postAddBtn = view.findViewById<Button>(R.id.post_upload_btn)
         postAddBtn.setOnClickListener{
-            parentFragmentManager.beginTransaction().replace(R.id.blank_container, AddPostPage()).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostAddPage()).commit()
         }
         return view
     }
@@ -46,6 +43,7 @@ class PostTab : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = PostAdapter(postDataList) {
+            // 기능 구현 : 편잽/삭제
         }
     }
 

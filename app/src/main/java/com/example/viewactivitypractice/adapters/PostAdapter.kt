@@ -11,6 +11,8 @@ import com.example.viewactivitypractice.datas.PostData
 
 // 리스트를 화면에 표시하기 위해서 아이템 단위로 View로 생성을 해서 RecyclerView에 바인딩 시키는 작업을 하는 객체
 // 싸그리 수정해야함.
+// 뷰홀더는 각각의 리스트 아이템 뷰를 저장하고 관리하는 객체
+// 그럼 뷰홀더는 태그아이디 목록들을 텍스트로 바꿔서 출력해야하네?
 class PostAdapter(private val postList: ArrayList<PostData>, private val onClick: (PostData) -> Unit) :
     RecyclerView.Adapter<PostAdapter.MyViewHolder>() {
 

@@ -31,7 +31,6 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     override fun onCreate(db: SQLiteDatabase) {
         createContactTable(db)
         createPostTable(db)
-
     }
 
     // 컨택트 테이블
@@ -52,7 +51,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 $COL_POST_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COL_CONTENT TEXT,
                 $COL_DATE TEXT,
-                $COL_TAGGED_ID INTEGER,
+                $COL_TAGGED_ID TEXT,
                 $COL_IMAGE_ID INTEGER
             );
         """.trimIndent()
@@ -68,7 +67,9 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         }
     }
 
+    // CRUD
     // Contant
+    // 만들기
     fun insertContact(name:String, phonenumber:String): Long {
         Log.d("DBhandler", "insert contact $name, $phonenumber")
         val values = ContentValues().apply {
@@ -110,7 +111,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val db = this.writableDatabase
         Log.d("updateDB", "id: $id, name: $name, num: $phoneNumber")
         val contentValues = ContentValues()
-        //contentValues.put(COL_ID, id)
+        // contentValues.put(COL_ID, id)
         contentValues.put(COL_NAME, name)
         contentValues.put(COL_PHONENUM, phoneNumber)
 
@@ -132,25 +133,22 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val postId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_ID))
                 val content = cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE))
-                val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAGGED_ID))
+                // val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAGGED_ID)) -> 리스트로 받아올 수 있도록
                 val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMAGE_ID))
 
-                val post = PostData(postId, content, date, taggedId.takeIf { it != 0 }, imageId.takeIf { it != 0 })
+                val post = PostData(postId, content, date, tagsId = emptyList(), imageId)
                 postList.add(post)
             } while (cursor.moveToNext())
         }
 
-        /**
-         * data class PostData (
-         *     var id : Int = 0,
-         *     var content: String = "",
-         *     var date: String = "",
-         *     val tagsId: Int = 0,
-         *     val imageId: Int = 0
-         */
         cursor.close()
         db.close()
 
         return postList
     }
+
+    // id기반 포스트 읽기
+    // 포스트 만들기
+    // 포스트 업데이트
+    // 포스트 삭제
 }

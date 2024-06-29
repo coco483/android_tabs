@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab1">연락처</string>
     <string name="tab2">갤러리</string>
-    <string name="tab3">설정</string>
+    <string name="tab3">포스트</string>
 
     <!-- 임시 저장용 번호 및 이름, 추후 json으로 변경 -->
     <string name="contact_name_1">김철수</string>
