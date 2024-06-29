@@ -26,7 +26,7 @@ class PostAdapter(private val postList: ArrayList<PostData>, private val onClick
         var currentItem = postList[position]
         holder.itemView.setOnClickListener { onClick(currentItem) }
         holder.content.text = currentItem.content
-        holder.date.text = currentItem.date
+        // holder.date.text = currentItem.date
         // 해시태그를 아이디(정수) -> 스트링으로 변환, 이미지를 아이디(정수) -> 이미지파일로 변환
 
     }

@@ -29,21 +29,18 @@ class PostAddPage : Fragment() {
         val uploadBtn = view.findViewById<Button>(R.id.post_upload_btn)
         val cancelBtn = view.findViewById<Button>(R.id.post_cancel_btn)
 
-        /uploadBtn.setOnClickListener{
+        uploadBtn.setOnClickListener{
             val content = view.findViewById<EditText>(R.id.content_ET).text.toString()
-            val phonenum = view.findViewById<EditText>(R.id.)text.toString()
-            if (phonenum.length != 11) {
-                Toast.makeText(requireContext(), "전화번호 11자리를 모두 입력해 주세요", Toast.LENGTH_SHORT).show()
-            } else if (name == ""){
-                Toast.makeText(requireContext(), "이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
-            } else {
-                myDB.insertContact(name, phonenum)
+            // val img =
+
+            if (content != "") {
+                myDB.insertPost(content)
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, ContactTab()).commit()
             }
         }
         cancelBtn.setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, ContactTab()).commit()
-        }*/
+        }
         return view
     }
 

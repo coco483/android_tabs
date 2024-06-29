@@ -22,7 +22,7 @@ private const val COL_PHONENUM = "phonenumber"
 // for Post
 private const val POST_TABLE_NAME = "Post"
 private const val COL_POST_ID = "post_id"
-private const val COL_CONTENT = "main_text"
+private const val COL_CONTENT = "content"
 private const val COL_DATE = "date"
 private const val COL_TAGGED_ID = "tagged_id"
 private const val COL_IMAGE_ID = "image_id"
@@ -136,7 +136,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 // val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAGGED_ID)) -> 리스트로 받아올 수 있도록
                 val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMAGE_ID))
 
-                val post = PostData(postId, content, date, tagsId = emptyList(), imageId)
+                val post = PostData(postId, content)//, date, tagsId = emptyList(), imageId)
                 postList.add(post)
             } while (cursor.moveToNext())
         }
@@ -149,6 +149,15 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
     // id기반 포스트 읽기
     // 포스트 만들기
+    fun insertPost(content: String): Long{
+        Log.d("DBhandler", "insert $content")
+        val values = ContentValues().apply {
+            put(COL_CONTENT, content)
+        }
+        val db = writableDatabase
+        return db.insert(POST_TABLE_NAME, null, values)
+    }
+
     // 포스트 업데이트
     // 포스트 삭제
 }
