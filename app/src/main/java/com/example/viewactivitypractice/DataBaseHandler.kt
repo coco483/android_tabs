@@ -32,7 +32,7 @@ private const val COL_POST_ID = "id"
 private const val COL_CONTENT = "content"
 private const val COL_DATE = "date"
 private const val COL_TAGGED_ID = "tagged_id"
-private const val COL_IMAGE_ID = "image_id"
+private const val COL_POST_IMG_ID = "image_id"
 
 class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, 1){
     override fun onCreate(db: SQLiteDatabase) {
@@ -68,7 +68,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 $COL_CONTENT TEXT,
                 $COL_DATE TEXT,
                 $COL_TAGGED_ID TEXT,
-                $COL_IMAGE_ID INTEGER
+                $COL_POST_IMG_ID INTEGER
             );
         """.trimIndent()
         db!!.execSQL(createPostTableQuery)
@@ -135,12 +135,26 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
     // 이미지 추가하기
     fun insertImg(img: Bitmap?): Long {
-        if (img == null) return 0
+        if (img == null) return -1
         Log.d("ImgDBhandler", "insert image")
         val values = ContentValues()
         values.put(COL_IMG, bitmapToByteArray(img))
         val db = writableDatabase
         return db.insert(IMG_TABLE_NAME, null, values)
+    }
+    fun getImg(id: Int?): Bitmap?{
+        if (id==null) return null
+        val db = readableDatabase
+        val query = ("SELECT $COL_IMG FROM $IMG_TABLE_NAME WHERE $COL_IMG_ID = ?")
+        val cursor = db.rawQuery(query, arrayOf(id.toString()))
+        var imgByteArray: ByteArray? = null
+        if (cursor.moveToFirst()) {
+            imgByteArray = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_IMG))
+        }
+        cursor.close()
+        db.close()
+        if (imgByteArray == null) return null
+        return byteArrayToBitmap(imgByteArray)
     }
     fun getAllImg(): ArrayList<ImageData>{
         val imgDataList = ArrayList<ImageData>()
@@ -164,12 +178,13 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun insertPost(post: PostData): Long{
-        Log.d("PostDBHandler", "insert contact ${post.content}")
+        Log.d("PostDBHandler", "insert contact ${post.content}, ${post.imageId}")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
         val values = ContentValues().apply {
             put(COL_CONTENT, post.content)
             put(COL_DATE, current)
+            put(COL_POST_IMG_ID, post.imageId)
         }
         val db = writableDatabase
         return db.insert(POST_TABLE_NAME, null, values)
@@ -183,6 +198,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val postValues = ContentValues()
         postValues.put(COL_CONTENT, post.content)
         postValues.put(COL_DATE, current)
+        postValues.put(COL_POST_IMG_ID, post.imageId)
 
         db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(post.id.toString()))
         db.close()
@@ -201,7 +217,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val content = cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE))
                 // val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAGGED_ID)) -> 리스트로 받아올 수 있도록
-                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMAGE_ID))
+                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_IMG_ID))
 
                 val post = PostData(postId, content, date, tagsId = emptyList(), imageId)
                 postList.add(post)
