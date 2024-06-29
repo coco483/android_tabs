@@ -25,18 +25,8 @@ class PostAdapter(private val postList: ArrayList<PostData>, private val onClick
         holder.itemView.setOnClickListener { onClick(currentItem) }
         holder.content.text = currentItem.content
         holder.date.text = currentItem.date
-        holder.date.text = currentItem.tagsId
+        // 해시태그를 아이디(정수) -> 스트링으로 변환, 이미지를 아이디(정수) -> 이미지파일로 변환
 
-    }
-    private fun formatPhoneNumbr(input: String): String {
-        // Ensure the input string is exactly 11 digits long
-        if (input.length != 11 || !input.all { it.isDigit() }) {
-            throw IllegalArgumentException("Input must be a string of exactly 11 digits")
-        }
-        val part1 = input.substring(0, 3)
-        val part2 = input.substring(3, 7)
-        val part3 = input.substring(7, 11)
-        return "$part1-$part2-$part3"
     }
 
     override fun getItemCount(): Int {
