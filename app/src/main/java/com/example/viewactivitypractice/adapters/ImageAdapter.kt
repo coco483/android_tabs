@@ -19,7 +19,7 @@ class ImageAdapter(private val imgList: ArrayList<ImageData>)
     override fun onBindViewHolder(holder: ImgViewHolder, position: Int) {
         val currentItem = imgList[position]
         if (currentItem.img != null) {
-            holder.img.setImageBitmap(currentItem.img)
+            holder.img.setImageURI(currentItem.img)
         }
     }
     override fun getItemCount(): Int {

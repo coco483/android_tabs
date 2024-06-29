@@ -1,7 +1,11 @@
 package com.example.viewactivitypractice.fragments
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +23,10 @@ import com.example.viewactivitypractice.datas.ImageData
  * create an instance of this fragment.
  */
 class GalleryTab : Fragment() {
+    private val pickupimage = 100
+    private var ImageURI : Uri? = null
     private lateinit var recyclerView: RecyclerView
-    private lateinit var imgDataList: ArrayList<ImageData>
+    private var imgDataList: ArrayList<ImageData> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +36,9 @@ class GalleryTab : Fragment() {
         val view =  inflater.inflate(R.layout.gallery_tab_fragment, container, false)
         val addBtn = view.findViewById<Button>(R.id.pick_img_button)
         addBtn.setOnClickListener{
-            //val pickupImgFromGallery = Intent(Intent.action)
+            // 갤러리에서 사진 가져오기
+            val pickupImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(pickupImgFromGallery, pickupimage)
         }
         return view
     }
@@ -42,8 +50,17 @@ class GalleryTab : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = ImageAdapter(imgDataList)
     }
+
+    // 사진 가져오면 imgData에 추가하기
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == pickupimage){
+            ImageURI = data?.data
+            Log.d("IMG_PICK", "successfully picked an img")
+            imgDataList.add(ImageData(484, ImageURI))
+        }
+    }
     private fun imgDataInitialize(){
-        imgDataList = ArrayList()
         imgDataList.add(ImageData(1, null))
         imgDataList.add(ImageData(2, null))
     }

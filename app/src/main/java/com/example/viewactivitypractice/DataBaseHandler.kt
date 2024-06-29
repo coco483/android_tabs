@@ -14,13 +14,15 @@ private const val DATABASE_NAME = "MyDB"
 // for Contact
 private const val CONTACT_TABLE_NAME = "Contacts"
 private const val COL_NAME = "name"
-private const val COL_ID = "id"
+private const val COL_CONTACT_ID = "id"
 private const val COL_PHONENUM = "phonenumber"
 
 // for Gallery
-
+private const val IMG_TABLE_NAME = "Images"
+private const val COL_IMG_ID = 'id'
+private const val COL_IMG = 'image'
 // for Post
-private const val POST_TABLE_NAME = "Post"
+private const val POST_TABLE_NAME = "Posts"
 private const val COL_POST_ID = "post_id"
 private const val COL_CONTENT = "main_text"
 private const val COL_DATE = "date"
@@ -30,17 +32,26 @@ private const val COL_IMAGE_ID = "image_id"
 class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, 1){
     override fun onCreate(db: SQLiteDatabase) {
         createContactTable(db)
+        createImgTable(db)
         createPostTable(db)
 
     }
 
-    // 컨택트 테이블
+    // 컨택트 테이블 생성
     private fun createContactTable(db: SQLiteDatabase?) {
         Log.d("ContactDBhandler", "contact db create table")
         val createContactTableQuery = ("CREATE TABLE $CONTACT_TABLE_NAME (" +
-                "$COL_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
+                "$COL_CONTACT_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
                 "$COL_NAME VARCHAR, " +
                 "$COL_PHONENUM VARCHAR(11))")
+        db?.execSQL(createContactTableQuery)
+    }
+    // 이미지 테이블 생성
+    private fun createImgTable(db: SQLiteDatabase?){
+        Log.d("ImgDBhandler", "img db create table")
+        val createContactTableQuery = ("CREATE TABLE $IMG_TABLE_NAME (" +
+                "$COL_IMG_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
+                "$COL_IMG VARCHAR)")
         db?.execSQL(createContactTableQuery)
     }
 
@@ -86,7 +97,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID))
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CONTACT_ID))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME))
                 val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_PHONENUM))
                 val contact = ContactData(id, name, phonenumber)
@@ -119,6 +130,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     }
 
 
+    /*
     // 포스트
     fun getAllPost() :ArrayList<PostData>{
 
@@ -153,4 +165,6 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         return postList
     }
+
+     */
 }

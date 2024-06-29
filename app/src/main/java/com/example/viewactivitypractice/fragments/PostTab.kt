@@ -51,7 +51,7 @@ class PostTab : Fragment() {
 
     private fun dataInitialize() {
         val postDb = (activity as MainActivity).mydb
-        postDataList = postDb.getAllPost()
+        //postDataList = postDb.getAllPost()
     }
 
 }
