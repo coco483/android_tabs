@@ -17,9 +17,9 @@
             android:id="@+id/item_image_post"
             android:layout_width="152dp"
             android:layout_height="166dp"
+            android:layout_marginEnd="6dp"
             android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toStartOf="@+id/item_text_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,31 +27,32 @@
             android:id="@+id/item_text_date"
             android:layout_width="124dp"
             android:layout_height="18dp"
-            android:layout_marginStart="192dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:gravity="right"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_image_post"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_hashtag"
             tools:text="24/01/01 00:00:00" />
 
         <TextView
             android:id="@+id/item_text_content"
             android:layout_width="202dp"
             android:layout_height="167dp"
+            android:layout_marginStart="6dp"
             android:maxLines="3"
-            tools:layout_editor_absoluteX="162dp"
-            tools:layout_editor_absoluteY="-2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_image_post"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="This is a short excerpt from the blog post that gives a glimpse into the content..." />
 
         <TextView
             android:id="@+id/item_hashtag"
-            android:layout_width="148dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="212dp"
+            android:layout_width="368dp"
+            android:layout_height="17dp"
+            android:layout_marginTop="12dp"
             android:gravity="left"
             android:text="/@hashtag"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_image_post" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
