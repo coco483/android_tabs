@@ -17,7 +17,7 @@ class PostAdapter(private val postList: ArrayList<PostData>, private val onClick
     RecyclerView.Adapter<PostAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        var itemView =
+        val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.post_items, parent, false)
         return MyViewHolder(itemView, onClick)
     }

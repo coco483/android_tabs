@@ -1,10 +1,16 @@
 package com.example.viewactivitypractice.fragments
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -18,43 +24,37 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class PostDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private var postId: Int = -1  // 인스턴스 변수로 ID 저장
+    private lateinit var postContent: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            postId = it.getInt("POST_ID")
+            postContent = it.getString("POST_CONTENT").toString()
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.post_detail_page, container, false)
+        val mydb = (activity as MainActivity).mydb
+        val view = inflater.inflate(R.layout.post_detail_page, container, false)
+        view.findViewById<EditText>(R.id.content_ET).setText(postContent)
+        val editBtn = view.findViewById<Button>(R.id.edit_btn)
+        editBtn.setOnClickListener {
+
+            val newContent = view.findViewById<EditText>(R.id.content_ET).text.toString()
+            if (newContent == "") {
+                Toast.makeText(requireContext(), "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            } else {
+                mydb.updatePost(postId, newContent) // 연락처 업데이트
+                parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab())
+                    .commit() // 변경 사항 반영
+            }
+        }
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PostDetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PostDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
