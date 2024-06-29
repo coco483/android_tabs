@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.0"
+cameraxVersion = "1.2.2"
 gson = "2.10.1"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
@@ -13,6 +14,10 @@ constraintlayout = "2.1.4"
 firebaseCrashlyticsBuildtools = "3.0.2"
 
 [libraries]
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraxVersion" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraxVersion" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraxVersion" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraxVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
