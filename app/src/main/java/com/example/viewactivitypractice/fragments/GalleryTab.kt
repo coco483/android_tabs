@@ -20,6 +20,7 @@ import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.adapters.ImageAdapter
 import com.example.viewactivitypractice.datas.ImageData
+import com.example.viewactivitypractice.uriToBitmap
 import java.io.InputStream
 
 
@@ -69,7 +70,7 @@ class GalleryTab : Fragment() {
             ImageURI = data?.data
             Log.d("IMG_PICK", "successfully picked an img")
             //imgDataList.add(ImageData(484, uriToBitmap(ImageURI)) )
-            myDB.insertImg(uriToBitmap(ImageURI))
+            myDB.insertImg(uriToBitmap(ImageURI, requireActivity()))
         }
         parentFragmentManager.beginTransaction().replace(R.id.blank_container, GalleryTab()).commit()
     }
@@ -77,10 +78,5 @@ class GalleryTab : Fragment() {
         imgDataList = myDB.getAllImg()
     }
 
-    fun uriToBitmap(uri: Uri?): Bitmap? {
-        if (uri == null) return null
-        val contentResolver = requireActivity().contentResolver
-        val inputStream: InputStream? = contentResolver.openInputStream(uri)
-        return BitmapFactory.decodeStream(inputStream)
-    }
+
 }
