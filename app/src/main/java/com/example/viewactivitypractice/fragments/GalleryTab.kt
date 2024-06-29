@@ -19,6 +19,6 @@ class GalleryTab : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab2, container, false)
+        return inflater.inflate(R.layout.gallery_tab_fragment, container, false)
     }
 }
