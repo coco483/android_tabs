@@ -2,6 +2,8 @@ package com.example.viewactivitypractice.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,9 +15,15 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.viewactivitypractice.DataBaseHandler
+import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.adapters.ImageAdapter
 import com.example.viewactivitypractice.datas.ImageData
+import java.io.InputStream
+
+
+
 
 /**
  * A simple [Fragment] subclass.
@@ -23,6 +31,7 @@ import com.example.viewactivitypractice.datas.ImageData
  * create an instance of this fragment.
  */
 class GalleryTab : Fragment() {
+    private lateinit var myDB: DataBaseHandler
     private val pickupimage = 100
     private var ImageURI : Uri? = null
     private lateinit var recyclerView: RecyclerView
@@ -32,6 +41,7 @@ class GalleryTab : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        myDB = (activity as MainActivity).mydb
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.gallery_tab_fragment, container, false)
         val addBtn = view.findViewById<Button>(R.id.pick_img_button)
@@ -39,6 +49,7 @@ class GalleryTab : Fragment() {
             // 갤러리에서 사진 가져오기
             val pickupImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             startActivityForResult(pickupImgFromGallery, pickupimage)
+
         }
         return view
     }
@@ -57,11 +68,19 @@ class GalleryTab : Fragment() {
         if (resultCode == RESULT_OK && requestCode == pickupimage){
             ImageURI = data?.data
             Log.d("IMG_PICK", "successfully picked an img")
-            imgDataList.add(ImageData(484, ImageURI))
+            //imgDataList.add(ImageData(484, uriToBitmap(ImageURI)) )
+            myDB.insertImg(uriToBitmap(ImageURI))
         }
+        parentFragmentManager.beginTransaction().replace(R.id.blank_container, GalleryTab()).commit()
     }
-    private fun imgDataInitialize(){
-        imgDataList.add(ImageData(1, null))
-        imgDataList.add(ImageData(2, null))
+    private fun imgDataInitialize() {
+        imgDataList = myDB.getAllImg()
+    }
+
+    fun uriToBitmap(uri: Uri?): Bitmap? {
+        if (uri == null) return null
+        val contentResolver = requireActivity().contentResolver
+        val inputStream: InputStream? = contentResolver.openInputStream(uri)
+        return BitmapFactory.decodeStream(inputStream)
     }
 }

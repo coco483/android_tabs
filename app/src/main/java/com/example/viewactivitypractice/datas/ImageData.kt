@@ -5,8 +5,9 @@ import android.net.Uri
 
 class ImageData() {
     var id :Int = 0
-    var img : Uri? = null
-    constructor(id:Int, img: Uri?) : this() {
+    lateinit var img : Bitmap
+
+    constructor(id:Int, img: Bitmap) : this() {
         this.id = id
         this.img = img
     }
