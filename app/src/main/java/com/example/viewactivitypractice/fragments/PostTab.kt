@@ -29,7 +29,7 @@ class PostTab : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.post_tab_fragment, container, false)
-        val postAddBtn = view.findViewById<Button>(R.id.post_upload_btn)
+        val postAddBtn = view.findViewById<Button>(R.id.post_edit_btn)
         postAddBtn.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostAddPage()).commit()
         }
@@ -60,6 +60,13 @@ class PostTab : Fragment() {
     private fun dataInitialize() {
         val postDb = (activity as MainActivity).mydb
         postDataList = postDb.getAllPost()
+    }
+
+    object HashTagParser {
+        fun parse(content: String): List<String> {
+            val regex = Regex("#(\\w+)")
+            return regex.findAll(content).map { it.groupValues[1] }.toList()
+        }
     }
 
 }

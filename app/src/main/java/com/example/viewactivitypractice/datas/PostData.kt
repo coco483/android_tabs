@@ -4,6 +4,6 @@ data class PostData (
     var id : Int,
     var content: String,
     var date: String,
-    val tagsId: List<Int> = emptyList(),
+    val tagsId: List<String> = emptyList(),
     val imageId: Int? = null
 )

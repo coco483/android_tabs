@@ -31,8 +31,13 @@ private const val POST_TABLE_NAME = "Posts"
 private const val COL_POST_ID = "id"
 private const val COL_CONTENT = "content"
 private const val COL_DATE = "date"
-private const val COL_TAGGED_ID = "tagged_id"
+private const val COL_TAG_LIST = "tag_list"
 private const val COL_IMAGE_ID = "image_id"
+// for Contact-Post Table
+private const val POST_TAGS_TABLE_NAME = "PostTags"
+private const val COL_POSTTAG_ID = "posttag_id"
+private const val COL_TAG_POST_ID = "post_id"
+private const val COL_TAG_CONTACT_ID = "contact_id"
 
 class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, 1){
     override fun onCreate(db: SQLiteDatabase) {
@@ -67,13 +72,27 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 $COL_POST_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COL_CONTENT TEXT,
                 $COL_DATE TEXT,
-                $COL_TAGGED_ID TEXT,
+                $COL_TAG_LIST TEXT,
                 $COL_IMAGE_ID INTEGER
             );
         """.trimIndent()
         db!!.execSQL(createPostTableQuery)
     }
 
+    // 컨택트-포스트 중간 테이블 생성
+    private fun createPostTagsTable(db: SQLiteDatabase) {
+        Log.d("PostTagDBhandler", "post db create table")
+        val CREATE_POST_TAGS_TABLE = """
+            CREATE TABLE $POST_TAGS_TABLE_NAME (
+                $COL_POSTTAG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COL_TAG_POST_ID INTEGER,
+                $COL_TAG_CONTACT_ID INTEGER,
+                FOREIGN KEY ($COL_TAG_POST_ID) REFERENCES Posts(post_id),
+                FOREIGN KEY ($COL_TAG_CONTACT_ID) REFERENCES Contacts(contact_id)
+            )
+        """.trimIndent()
+        db.execSQL(CREATE_POST_TAGS_TABLE)
+    }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldeversion: Int, newversion: Int) {
         val dropTableQuery = "DROP TABLE IF EXISTS $CONTACT_TABLE_NAME"
@@ -83,7 +102,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         }
     }
 
-    // Contant
+    // Contact
     fun insertContact(name:String, phonenumber:String): Long {
         Log.d("DBhandler", "insert contact $name, $phonenumber")
         val values = ContentValues().apply {
@@ -200,7 +219,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val postId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_ID))
                 val content = cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE))
-                // val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAGGED_ID)) -> 리스트로 받아올 수 있도록
+                // val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAG_LIST)) -> 리스트로 받아올 수 있도록
                 val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMAGE_ID))
 
                 val post = PostData(postId, content, date, tagsId = emptyList(), imageId)
@@ -214,18 +233,51 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         return postList
     }
 
-    // id기반 포스트 읽기
-    // 포스트 만들기
-    /*
-    fun insertPost(content: String): Long{
-        Log.d("DBhandler", "insert $content")
-        val values = ContentValues().apply {
-            put(COL_CONTENT, content)
-        }
-        val db = writableDatabase
-        return db.insert(POST_TABLE_NAME, null, values)
-    }*/
+    fun deletePostById(postId: Int) {
 
-    // 포스트 업데이트
-    // 포스트 삭제
+        val db = this.writableDatabase
+        db.delete(POST_TABLE_NAME, "id = ?", arrayOf(postId.toString()))
+        db.close()
+
+    }
+
+    // 태그를 하면 연락처의 창을 열어줌
+    fun getContactIdByName(contactName: String): Int? {
+        val db = this.readableDatabase
+        val query = "SELECT $COL_CONTACT_ID FROM $CONTACT_TABLE_NAME WHERE $COL_NAME = ?"
+        val cursor = db.rawQuery(query, arrayOf(contactName))
+        var contactId: Int? = null
+        val columnIndex = cursor.getColumnIndex(COL_CONTACT_ID)
+        if (columnIndex != -1 && cursor.moveToFirst()) {
+            contactId = cursor.getInt(columnIndex)
+        }
+        cursor.close()
+        db.close()
+        return contactId
+    }
+
+    // C 태그 테이블에 새 레코드 삽입
+    fun insertTag(postId: Int, userId: Int): Long {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COL_TAG_POST_ID, postId)
+            put(COL_TAG_CONTACT_ID, userId)
+        }
+        val result = db.insert(POST_TAGS_TABLE_NAME, null, values)
+        db.close()
+        return result
+    }
+
+
+    //R
+
+    //U
+
+    //D
+    fun deleteTag(postTagId: Int): Int {
+        val db = this.writableDatabase
+        val result = db.delete(POST_TAGS_TABLE_NAME, "$COL_POSTTAG_ID = ?", arrayOf(postTagId.toString()))
+        db.close()
+        return result
+    }
 }

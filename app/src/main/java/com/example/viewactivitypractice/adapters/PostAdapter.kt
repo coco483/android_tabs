@@ -26,9 +26,7 @@ class PostAdapter(private val postList: ArrayList<PostData>, private val onClick
         var currentItem = postList[position]
         holder.itemView.setOnClickListener { onClick(currentItem) }
         holder.content.text = currentItem.content
-        // holder.date.text = currentItem.date
-        // 해시태그를 아이디(정수) -> 스트링으로 변환, 이미지를 아이디(정수) -> 이미지파일로 변환
-
+        holder.date.text = currentItem.date
     }
 
     override fun getItemCount(): Int {
@@ -39,7 +37,7 @@ class PostAdapter(private val postList: ArrayList<PostData>, private val onClick
         // val name: TextView = itemView.findViewById(R.id.item_name)
         val date: TextView = itemView.findViewById(R.id.item_text_date)
         val content: TextView = itemView.findViewById(R.id.item_text_content)
-        val tagsId: TextView = itemView.findViewById(R.id.item_hashtag)
+        val tagsId: TextView = itemView.findViewById(R.id.item_tag)
         val img: ImageView = itemView.findViewById(R.id.item_image_post)
     }
 }

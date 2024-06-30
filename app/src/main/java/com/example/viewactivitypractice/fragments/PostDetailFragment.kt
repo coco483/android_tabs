@@ -43,9 +43,11 @@ class PostDetailFragment : Fragment() {
         val mydb = (activity as MainActivity).mydb
         val view = inflater.inflate(R.layout.post_detail_page, container, false)
         view.findViewById<EditText>(R.id.content_ET).setText(postContent)
-        val editBtn = view.findViewById<Button>(R.id.edit_btn)
-        editBtn.setOnClickListener {
+        val editBtn = view.findViewById<Button>(R.id.post_edit_btn)
+        val deleteBtn = view.findViewById<Button>(R.id.post_delete_btn)
 
+        // 편집버튼
+        editBtn.setOnClickListener {
             val newContent = view.findViewById<EditText>(R.id.content_ET).text.toString()
             if (newContent == "") {
                 Toast.makeText(requireContext(), "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
@@ -53,6 +55,18 @@ class PostDetailFragment : Fragment() {
                 mydb.updatePost(PostData(postId, newContent, "")) // 연락처 업데이트
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab())
                     .commit() // 변경 사항 반영
+            }
+        }
+
+        // 삭제버튼
+        deleteBtn.setOnClickListener {
+            if (postId != -1) {
+                mydb.deletePostById(postId) // ID를 사용하여 삭제
+                Toast.makeText(context, "Contact deleted successfully", Toast.LENGTH_SHORT).show()
+                parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab())
+                    .commit()
+            } else {
+                Toast.makeText(context, "Invalid contact ID", Toast.LENGTH_SHORT).show()
             }
         }
         return view
