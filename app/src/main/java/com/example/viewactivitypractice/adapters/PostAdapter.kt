@@ -33,6 +33,8 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
         holder.itemView.setOnClickListener { onClick(currentItem) }
         holder.content.text = currentItem.content
         holder.date.text = currentItem.date
+        val bitImg = myDB.getImgById(currentItem.imageId)
+        holder.img.setImageBitmap(bitImg)
 
         /*// 태그 처리
         val spannableString = SpannableString(currentItem.taggedNameList.joinToString(" ") { "@$it" })
@@ -49,11 +51,9 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
         holder.taggedName.text = spannableString
         holder.taggedName.movementMethod = LinkMovementMethod.getInstance()
 
-        val bitImg = myDB.getImgById(currentItem.imageId)
-        holder.img.setImageBitmap(bitImg)
-        holder.date.text = currentItem.date
         // 해시태그를 아이디(정수) -> 스트링으로 변환, 이미지를 아이디(정수) -> 이미지파일로 변환
 */
+
     }
 
     override fun getItemCount(): Int {
