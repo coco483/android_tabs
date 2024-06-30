@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/post_imageView"
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_marginStart="30dp"
@@ -14,36 +14,39 @@
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toTopOf="@+id/content_ET"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <EditText
         android:id="@+id/content_ET"
         android:layout_width="350dp"
         android:layout_height="230dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="436dp"
         android:ems="10"
+        android:hint="Content"
         android:inputType="text"
         android:text=""
-        android:hint="Content"
+        app:layout_constraintBottom_toTopOf="@+id/tag_ET"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/tag_ET"
         android:layout_width="350dp"
         android:layout_height="33dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:ems="10"
         android:inputType="text"
         android:text="tag"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content_ET" />
 
@@ -75,7 +78,7 @@
         android:layout_marginBottom="30dp"
         android:gravity="center"
         android:text="YYYY/MM/DD HH:MM:SS"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/post_imageView"
         app:layout_constraintEnd_toStartOf="@+id/post_upload_btn"
         app:layout_constraintStart_toEndOf="@+id/post_cancel_btn"
         app:layout_constraintTop_toTopOf="parent" />

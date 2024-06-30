@@ -32,7 +32,7 @@ private const val COL_POST_ID = "id"
 private const val COL_CONTENT = "content"
 private const val COL_DATE = "date"
 private const val COL_TAG_LIST = "tag_list"
-private const val COL_IMAGE_ID = "image_id"
+private const val COL_POST_IMG_ID = "image_id"
 // for Contact-Post Table
 private const val POST_TAGS_TABLE_NAME = "PostTags"
 private const val COL_POSTTAG_ID = "posttag_id"
@@ -73,7 +73,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 $COL_CONTENT TEXT,
                 $COL_DATE TEXT,
                 $COL_TAG_LIST TEXT,
-                $COL_IMAGE_ID INTEGER
+                $COL_POST_IMG_ID INTEGER
             );
         """.trimIndent()
         db!!.execSQL(createPostTableQuery)
@@ -111,6 +111,24 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         }
         val db = writableDatabase
         return db.insert(CONTACT_TABLE_NAME, null, values)
+    }
+    fun getContactIncludes(subStr:String): ArrayList<ContactData> {
+        val contactList = ArrayList<ContactData>()
+        val db = readableDatabase
+        val query = ("SELECT * FROM $CONTACT_TABLE_NAME WHERE $COL_NAME LIKE ? OR $COL_PHONENUM LIKE ?")
+        val cursor = db.rawQuery(query, arrayOf("%$subStr%", "%$subStr%"))
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CONTACT_ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME))
+                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_PHONENUM))
+                val contact = ContactData(id, name, phonenumber)
+                contactList.add(contact)
+                Log.d("ContactDB", "searched $name, $phonenumber")
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return contactList
     }
     fun getAllContact(): ArrayList<ContactData>{
         val contactList = ArrayList<ContactData>()
@@ -154,12 +172,31 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
     // 이미지 추가하기
     fun insertImg(img: Bitmap?): Long {
-        if (img == null) return 0
+        if (img == null) return -1
         Log.d("ImgDBhandler", "insert image")
         val values = ContentValues()
         values.put(COL_IMG, bitmapToByteArray(img))
         val db = writableDatabase
         return db.insert(IMG_TABLE_NAME, null, values)
+    }
+    private fun deleteImgById(imgId: Int) {
+        val db = this.writableDatabase
+        db.delete(IMG_TABLE_NAME, "id = ?", arrayOf(imgId.toString()))
+        db.close()
+    }
+    fun getImgById(id: Int?): Bitmap?{
+        if (id==null) return null
+        val db = readableDatabase
+        val query = ("SELECT $COL_IMG FROM $IMG_TABLE_NAME WHERE $COL_IMG_ID = ?")
+        val cursor = db.rawQuery(query, arrayOf(id.toString()))
+        var imgByteArray: ByteArray? = null
+        if (cursor.moveToFirst()) {
+            imgByteArray = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_IMG))
+        }
+        cursor.close()
+        db.close()
+        if (imgByteArray == null) return null
+        return byteArrayToBitmap(imgByteArray)
     }
     fun getAllImg(): ArrayList<ImageData>{
         val imgDataList = ArrayList<ImageData>()
@@ -183,12 +220,13 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun insertPost(post: PostData): Long{
-        Log.d("PostDBHandler", "insert contact ${post.content}")
+        Log.d("PostDBHandler", "insert contact ${post.content}, ${post.imageId}")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
         val values = ContentValues().apply {
             put(COL_CONTENT, post.content)
             put(COL_DATE, current)
+            put(COL_POST_IMG_ID, post.imageId)
         }
         val db = writableDatabase
         return db.insert(POST_TABLE_NAME, null, values)
@@ -202,9 +240,25 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val postValues = ContentValues()
         postValues.put(COL_CONTENT, post.content)
         postValues.put(COL_DATE, current)
+        postValues.put(COL_POST_IMG_ID, post.imageId)
 
         db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(post.id.toString()))
         db.close()
+    }
+    fun deletePostById(postId: Int) {
+        val readableDB = readableDatabase
+        val query = ("SELECT $COL_POST_IMG_ID FROM $POST_TABLE_NAME WHERE $COL_POST_ID = ?")
+        val cursor = readableDB.rawQuery(query, arrayOf(postId.toString()))
+        val postImgId: Int
+        if (cursor.moveToFirst()) {
+            postImgId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_IMG_ID))
+            deleteImgById(postImgId)
+        }
+        cursor.close()
+        readableDB.close()
+        val writableDB = this.writableDatabase
+        writableDB.delete(POST_TABLE_NAME, "id = ?", arrayOf(postId.toString()))
+        writableDB.close()
     }
     // 포스트
     fun getAllPost() :ArrayList<PostData>{
@@ -220,9 +274,9 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val content = cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE))
                 // val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAG_LIST)) -> 리스트로 받아올 수 있도록
-                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMAGE_ID))
+                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_IMG_ID))
 
-                val post = PostData(postId, content, date, tagsId = emptyList(), imageId)
+                val post = PostData(postId, content, date, taggedNameList = emptyList(), imageId)
                 postList.add(post)
             } while (cursor.moveToNext())
         }
@@ -233,13 +287,6 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         return postList
     }
 
-    fun deletePostById(postId: Int) {
-
-        val db = this.writableDatabase
-        db.delete(POST_TABLE_NAME, "id = ?", arrayOf(postId.toString()))
-        db.close()
-
-    }
 
     // 태그를 하면 연락처의 창을 열어줌
     fun getContactIdByName(contactName: String): Int? {

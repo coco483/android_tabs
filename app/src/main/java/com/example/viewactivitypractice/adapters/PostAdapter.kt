@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.viewactivitypractice.DataBaseHandler
+import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.datas.PostData
 
@@ -17,7 +19,7 @@ import com.example.viewactivitypractice.datas.PostData
 // 싸그리 수정해야함.
 // 뷰홀더는 각각의 리스트 아이템 뷰를 저장하고 관리하는 객체
 // 그럼 뷰홀더는 태그아이디 목록들을 텍스트로 바꿔서 출력해야하네?
-class PostAdapter(private val postList: ArrayList<PostData>, private val onClick: (PostData) -> Unit, private val onTagClick: (String) -> Unit) :
+class PostAdapter(private val myDB: DataBaseHandler, private val postList: ArrayList<PostData>, private val onClick: (PostData) -> Unit) :
     RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -32,7 +34,7 @@ class PostAdapter(private val postList: ArrayList<PostData>, private val onClick
         holder.content.text = currentItem.content
         holder.date.text = currentItem.date
 
-        // 태그 처리
+        /*// 태그 처리
         val spannableString = SpannableString(currentItem.taggedNameList.joinToString(" ") { "@$it" })
         currentItem.taggedNameList.forEach { tagName ->
             val tagStart = spannableString.indexOf("@$tagName")
@@ -47,7 +49,11 @@ class PostAdapter(private val postList: ArrayList<PostData>, private val onClick
         holder.taggedName.text = spannableString
         holder.taggedName.movementMethod = LinkMovementMethod.getInstance()
 
-
+        val bitImg = myDB.getImgById(currentItem.imageId)
+        holder.img.setImageBitmap(bitImg)
+        holder.date.text = currentItem.date
+        // 해시태그를 아이디(정수) -> 스트링으로 변환, 이미지를 아이디(정수) -> 이미지파일로 변환
+*/
     }
 
     override fun getItemCount(): Int {
@@ -62,6 +68,3 @@ class PostAdapter(private val postList: ArrayList<PostData>, private val onClick
         val img: ImageView = itemView.findViewById(R.id.item_image_post)
         }
     }
-
-
-}
