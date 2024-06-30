@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,12 +36,22 @@ class PostTab : Fragment() {
         postAddBtn.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostAddPage()).commit()
         }
+        val searchBtn = view.findViewById<Button>(R.id.post_search_btn)
+        searchBtn.setOnClickListener{
+            val searchText = view.findViewById<EditText>(R.id.post_search_ET).text.toString()
+            postDataList = myDB.getPostIncludes(searchText)
+            setRecyclerView(view)
+        }
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
+        setRecyclerView(view)
+
+    }
+    private fun setRecyclerView(view: View) {
         recyclerView = view.findViewById(R.id.postRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
@@ -59,7 +70,6 @@ class PostTab : Fragment() {
                 .commit()
         }
     }
-
     private fun dataInitialize() {
         val postDb = (activity as MainActivity).mydb
         postDataList = postDb.getAllPost()

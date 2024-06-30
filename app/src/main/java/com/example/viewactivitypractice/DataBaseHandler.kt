@@ -112,11 +112,16 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
         return db.insert(CONTACT_TABLE_NAME, null, values)
     }
-    fun getContactIncludes(subStr:String): ArrayList<ContactData> {
+    fun getContactIncludes(subString:String): ArrayList<ContactData> {
         val contactList = ArrayList<ContactData>()
         val db = readableDatabase
-        val query = ("SELECT * FROM $CONTACT_TABLE_NAME WHERE $COL_NAME LIKE ? OR $COL_PHONENUM LIKE ?")
-        val cursor = db.rawQuery(query, arrayOf("%$subStr%", "%$subStr%"))
+        val query = """
+            SELECT * FROM $CONTACT_TABLE_NAME 
+            WHERE REPLACE(REPLACE(REPLACE($COL_NAME, ' ', ''), '\n', ''), '\t', '') LIKE ? 
+            OR REPLACE(REPLACE(REPLACE($COL_PHONENUM, ' ', ''), '\n', ''), '\t', '') LIKE ?
+        """.trimIndent()
+        val cleanSubString = subString.replace("\\s".toRegex(), "")
+        val cursor = db.rawQuery(query, arrayOf("%$cleanSubString%", "%$cleanSubString%"))
         if (cursor.moveToFirst()) {
             do {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CONTACT_ID))
@@ -259,6 +264,29 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val writableDB = this.writableDatabase
         writableDB.delete(POST_TABLE_NAME, "id = ?", arrayOf(postId.toString()))
         writableDB.close()
+    }
+    fun getPostIncludes(subString:String): ArrayList<PostData> {
+        val postList = ArrayList<PostData>()
+        val db = readableDatabase
+        val query = """
+            SELECT * FROM $POST_TABLE_NAME 
+            WHERE REPLACE(REPLACE(REPLACE($COL_CONTENT, ' ', ''), '\n', ''), '\t', '') LIKE ? 
+        """.trimIndent()
+        val cleanSubString = subString.replace("\\s".toRegex(), "")
+        val cursor = db.rawQuery(query, arrayOf("%$cleanSubString%"))
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_ID))
+                val content = cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT))
+                val date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE))
+                val imgId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_IMG_ID))
+                val post = PostData(id, content, date, imageId = imgId)
+                postList.add(post)
+                Log.d("PostDB", "searched $content, $imgId")
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return postList
     }
     // 포스트
     fun getAllPost() :ArrayList<PostData>{

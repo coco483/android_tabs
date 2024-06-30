@@ -21,4 +21,22 @@
         android:layout_height="wrap_content"
         android:text="Upload" />
 
+    <EditText
+        android:id="@+id/post_search_ET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:hint="search for contact"
+        android:text=""
+        android:textSize="28sp"
+        android:minWidth="200dp"
+        android:minHeight="50dp"/>
+
+    <Button
+        android:id="@+id/post_search_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:text="search" />
+
 </FrameLayout>
