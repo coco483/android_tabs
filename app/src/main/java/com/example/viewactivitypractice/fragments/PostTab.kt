@@ -50,6 +50,7 @@ class PostTab : Fragment() {
                 arguments = Bundle().apply {
                     putInt("POST_ID", post.id)  // 가정: ContactData에 id 필드가 있다고 가정
                     putString("POST_CONTENT", post.content)
+                    post.imageId?.let { putInt("POST_IMG_ID", it) }
                 }
             }
             parentFragmentManager.beginTransaction()

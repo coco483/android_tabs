@@ -28,7 +28,7 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
         var currentItem = postList[position]
         holder.itemView.setOnClickListener { onClick(currentItem) }
         holder.content.text = currentItem.content
-        val bitImg = myDB.getImg(currentItem.imageId)
+        val bitImg = myDB.getImgById(currentItem.imageId)
         holder.img.setImageBitmap(bitImg)
         holder.date.text = currentItem.date
         // 해시태그를 아이디(정수) -> 스트링으로 변환, 이미지를 아이디(정수) -> 이미지파일로 변환

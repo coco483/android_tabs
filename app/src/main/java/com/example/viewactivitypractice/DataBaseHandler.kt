@@ -142,7 +142,12 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
         return db.insert(IMG_TABLE_NAME, null, values)
     }
-    fun getImg(id: Int?): Bitmap?{
+    private fun deleteImgById(imgId: Int) {
+        val db = this.writableDatabase
+        db.delete(IMG_TABLE_NAME, "id = ?", arrayOf(imgId.toString()))
+        db.close()
+    }
+    fun getImgById(id: Int?): Bitmap?{
         if (id==null) return null
         val db = readableDatabase
         val query = ("SELECT $COL_IMG FROM $IMG_TABLE_NAME WHERE $COL_IMG_ID = ?")
@@ -202,6 +207,21 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(post.id.toString()))
         db.close()
+    }
+    fun deletePostById(postId: Int) {
+        val readableDB = readableDatabase
+        val query = ("SELECT $COL_POST_IMG_ID FROM $POST_TABLE_NAME WHERE $COL_POST_ID = ?")
+        val cursor = readableDB.rawQuery(query, arrayOf(postId.toString()))
+        val postImgId: Int
+        if (cursor.moveToFirst()) {
+            postImgId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_IMG_ID))
+            deleteImgById(postImgId)
+        }
+        cursor.close()
+        readableDB.close()
+        val writableDB = this.writableDatabase
+        writableDB.delete(POST_TABLE_NAME, "id = ?", arrayOf(postId.toString()))
+        writableDB.close()
     }
     // 포스트
     fun getAllPost() :ArrayList<PostData>{
