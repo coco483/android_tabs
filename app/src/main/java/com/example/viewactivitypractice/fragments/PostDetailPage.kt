@@ -21,10 +21,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [PostDetailFragment.newInstance] factory method to
+ * Use the [PostDetailPage.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PostDetailFragment : Fragment() {
+class PostDetailPage : Fragment() {
     private var postId: Int = -1  // 인스턴스 변수로 ID 저장
     private lateinit var postContent: String
     override fun onCreate(savedInstanceState: Bundle?) {

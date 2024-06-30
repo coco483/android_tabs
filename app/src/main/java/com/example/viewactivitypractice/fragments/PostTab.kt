@@ -43,15 +43,15 @@ class PostTab : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = PostAdapter(postDataList) { post ->
-            // 클릭된 아이템의 연락처 정보를 ContactDetailPage 프래그먼트에 전달
-            val detailFragment = PostDetailFragment().apply {
+            // 클릭된 아이템의 연락처 정보를 PostDetailPage 프래그먼트에 전달
+            val detailPage = PostDetailPage().apply {
                 arguments = Bundle().apply {
-                    putInt("POST_ID", post.id)  // 가정: ContactData에 id 필드가 있다고 가정
+                    putInt("POST_ID", post.id)  // 가정: PostData에 id 필드가 있다고 가정
                     putString("POST_CONTENT", post.content)
                 }
             }
             parentFragmentManager.beginTransaction()
-                .replace(R.id.blank_container, detailFragment)
+                .replace(R.id.blank_container, detailPage)
                 .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
                 .commit()
         }
@@ -62,11 +62,8 @@ class PostTab : Fragment() {
         postDataList = postDb.getAllPost()
     }
 
-    object HashTagParser {
-        fun parse(content: String): List<String> {
-            val regex = Regex("#(\\w+)")
-            return regex.findAll(content).map { it.groupValues[1] }.toList()
-        }
+    fun extractTagsFromText(text: String): List<String> {
+        return text.split(" ").filter { it.startsWith("@") }
     }
 
 }

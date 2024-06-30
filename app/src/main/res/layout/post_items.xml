@@ -30,7 +30,7 @@
             android:layout_marginTop="12dp"
             android:gravity="right"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_tag"
+            app:layout_constraintTop_toBottomOf="@id/item_tag_text"
             tools:text="24/01/01" />
 
         <TextView
@@ -45,7 +45,7 @@
             tools:text="This is a short excerpt from the blog post that gives a glimpse into the content..." />
 
         <TextView
-            android:id="@+id/item_tag"
+            android:id="@+id/item_tag_text"
             android:layout_width="368dp"
             android:layout_height="17dp"
             android:layout_marginTop="12dp"
