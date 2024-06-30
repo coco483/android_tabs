@@ -93,6 +93,24 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
         return db.insert(CONTACT_TABLE_NAME, null, values)
     }
+    fun getContactIncludes(subStr:String): ArrayList<ContactData> {
+        val contactList = ArrayList<ContactData>()
+        val db = readableDatabase
+        val query = ("SELECT * FROM $CONTACT_TABLE_NAME WHERE $COL_NAME LIKE ? OR $COL_PHONENUM LIKE ?")
+        val cursor = db.rawQuery(query, arrayOf("%$subStr%", "%$subStr%"))
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CONTACT_ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME))
+                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_PHONENUM))
+                val contact = ContactData(id, name, phonenumber)
+                contactList.add(contact)
+                Log.d("ContactDB", "searched $name, $phonenumber")
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return contactList
+    }
     fun getAllContact(): ArrayList<ContactData>{
         val contactList = ArrayList<ContactData>()
         val db = readableDatabase

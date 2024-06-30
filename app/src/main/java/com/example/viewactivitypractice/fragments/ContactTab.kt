@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.viewactivitypractice.DataBaseHandler
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.adapters.ContactAdapter
@@ -22,18 +24,25 @@ import com.example.viewactivitypractice.datas.ContactData
 
 class ContactTab : Fragment() {
 
-    private lateinit var adapter: ContactAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var contactDataList: ArrayList<ContactData>
+    private lateinit var myDB: DataBaseHandler
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        myDB = (activity as MainActivity).mydb
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.contact_tab_fragment, container, false)
         val add_btn = view.findViewById<Button>(R.id.add_contact_button)
         add_btn.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, ContactAddPage()).commit()
+        }
+        val searchBtn = view.findViewById<Button>(R.id.contact_search_btn)
+        searchBtn.setOnClickListener{
+            val searchText = view.findViewById<EditText>(R.id.contact_search_ET).text.toString()
+            contactDataList = myDB.getContactIncludes(searchText)
+            setRecyclerView(view)
         }
         return view
     }
@@ -41,6 +50,9 @@ class ContactTab : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
+        setRecyclerView(view)
+    }
+    private fun setRecyclerView(view: View){
         recyclerView = view.findViewById(R.id.numRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
@@ -62,7 +74,6 @@ class ContactTab : Fragment() {
     private fun dataInitialize() {
         //val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
         //contactDataList = parseJsonToNumberDatas(jsonString)
-        var mydb = (activity as MainActivity).mydb
-        contactDataList = mydb.getAllContact()
+        contactDataList = myDB.getAllContact()
     }
 }
