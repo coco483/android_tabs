@@ -45,7 +45,7 @@ class PostTab : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = PostAdapter(myDB, postDataList) { post ->
-            // 클릭된 아이템의 연락처 정보를 ContactDetailPage 프래그먼트에 전달
+            // 클릭된 아이템의 연락처 정보를 PostDetailPage 프래그먼트에 전달
             val detailPage = PostDetailPage().apply {
                 arguments = Bundle().apply {
                     putInt("POST_ID", post.id)  // 가정: PostData에 id 필드가 있다고 가정

@@ -12,14 +12,14 @@
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_btn"
         app:layout_constraintBottom_toTopOf="@+id/content_ET"/>
+
     <EditText
         android:id="@+id/content_ET"
         android:layout_width="350dp"
         android:layout_height="230dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="30dp"
         android:ems="10"
         android:inputType="text"
@@ -30,30 +30,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_detail_imageView" />
 
-        app:layout_constraintTop_toBottomOf="@+id/content_ET" />
-
     <Button
         android:id="@+id/post_edit_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="304dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:text="Edit"
-        app:layout_constraintBottom_toTopOf="@+id/content_ET"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/delete_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="14dp"
-        android:text="delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/content_ET" />
-
-
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -74,7 +58,6 @@
         android:layout_marginBottom="30dp"
         android:gravity="center"
         android:text="YYYY/MM/DD HH:MM:SS"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toStartOf="@+id/post_edit_btn"
         app:layout_constraintStart_toEndOf="@+id/post_delete_btn"
         app:layout_constraintTop_toTopOf="parent" />

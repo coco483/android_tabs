@@ -61,7 +61,7 @@ class PostDetailPage : Fragment() {
                     .commit() // 변경 사항 반영
             }
         }
-        val deleteBtn = view.findViewById<Button>(R.id.delete_btn)
+        val deleteBtn = view.findViewById<Button>(R.id.post_delete_btn)
         deleteBtn.setOnClickListener {
             mydb.deletePostById(postId)
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab())
