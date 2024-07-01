@@ -5,10 +5,10 @@ import android.net.Uri
 
 class ImageData() {
     var id :Int = 0
-    lateinit var img : Bitmap
+    lateinit var imgPath : String
 
-    constructor(id:Int, img: Bitmap) : this() {
+    constructor(id:Int, imgPath: String) : this() {
         this.id = id
-        this.img = img
+        this.imgPath = imgPath
     }
 }
