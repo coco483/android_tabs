@@ -37,11 +37,12 @@ class PostTab : Fragment() {
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostAddPage()).commit()
         }
         val searchBtn = view.findViewById<Button>(R.id.post_search_btn)
-        searchBtn.setOnClickListener{
+        /*searchBtn.setOnClickListener{
             val searchText = view.findViewById<EditText>(R.id.post_search_ET).text.toString()
             postDataList = myDB.getPostIncludes(searchText)
             setRecyclerView(view)
         }
+         */
         return view
     }
 

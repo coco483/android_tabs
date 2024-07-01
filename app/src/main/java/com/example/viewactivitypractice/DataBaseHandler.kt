@@ -18,49 +18,49 @@ private const val DATABASE_NAME = "MyDB"
 
 // for Contact
 private const val CONTACT_TABLE_NAME = "Contacts"
-private const val COL_NAME = "name"
-private const val COL_CONTACT_ID = "id"
-private const val COL_PHONENUM = "phonenumber"
+private const val CONTACT_NAME = "name"
+private const val CONTACT_ID = "id"
+private const val CONTACT_PHONENUM = "phonenumber"
 
 // for Gallery
 private const val IMG_TABLE_NAME = "Images"
-private const val COL_IMG_ID = "id"
-private const val COL_IMG = "image"
+private const val IMG_ID = "id"
+private const val IMG_BLOB = "image"
 // for Post
 private const val POST_TABLE_NAME = "Posts"
-private const val COL_POST_ID = "id"
-private const val COL_CONTENT = "content"
-private const val COL_DATE = "date"
-private const val COL_TAG_LIST = "tag_list"
-private const val COL_POST_IMG_ID = "image_id"
+private const val POST_ID = "id"
+private const val POST_CONTENT = "content"
+private const val POST_DATE = "date"
+private const val POST_IMG_ID = "image_id"
 // for Contact-Post Table
 private const val POST_TAGS_TABLE_NAME = "PostTags"
-private const val COL_POSTTAG_ID = "posttag_id"
-private const val COL_TAG_POST_ID = "post_id"
-private const val COL_TAG_CONTACT_ID = "contact_id"
+private const val POSTTAG_ID = "posttag_id"
+private const val POSTTAG_POST_ID = "post_id"
+private const val POSTTAG_CONTACT_ID = "contact_id"
 
 class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, 1){
     override fun onCreate(db: SQLiteDatabase) {
         createContactTable(db)
         createImgTable(db)
         createPostTable(db)
+        createPostTagsTable(db)
     }
 
     // 컨택트 테이블 생성
     private fun createContactTable(db: SQLiteDatabase?) {
         Log.d("ContactDBhandler", "contact db create table")
         val createContactTableQuery = ("CREATE TABLE $CONTACT_TABLE_NAME (" +
-                "$COL_CONTACT_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
-                "$COL_NAME VARCHAR, " +
-                "$COL_PHONENUM VARCHAR(11))")
+                "$CONTACT_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
+                "$CONTACT_NAME VARCHAR, " +
+                "$CONTACT_PHONENUM VARCHAR(11))")
         db!!.execSQL(createContactTableQuery)
     }
     // 이미지 테이블 생성
     private fun createImgTable(db: SQLiteDatabase?){
         Log.d("ImgDBhandler", "img db create table")
         val createImgTableQuery = ("CREATE TABLE $IMG_TABLE_NAME (" +
-                "$COL_IMG_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "$COL_IMG BLOB)")
+                "$IMG_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "$IMG_BLOB BLOB)")
         db!!.execSQL(createImgTableQuery)
     }
 
@@ -69,11 +69,10 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         Log.d("PostDBhandler", "post db create table")
         val createPostTableQuery = """
             CREATE TABLE $POST_TABLE_NAME (
-                $COL_POST_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COL_CONTENT TEXT,
-                $COL_DATE TEXT,
-                $COL_TAG_LIST TEXT,
-                $COL_POST_IMG_ID INTEGER
+                $POST_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $POST_CONTENT TEXT,
+                $POST_DATE TEXT,
+                $POST_IMG_ID INTEGER
             );
         """.trimIndent()
         db!!.execSQL(createPostTableQuery)
@@ -84,11 +83,11 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         Log.d("PostTagDBhandler", "post db create table")
         val CREATE_POST_TAGS_TABLE = """
             CREATE TABLE $POST_TAGS_TABLE_NAME (
-                $COL_POSTTAG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COL_TAG_POST_ID INTEGER,
-                $COL_TAG_CONTACT_ID INTEGER,
-                FOREIGN KEY ($COL_TAG_POST_ID) REFERENCES Posts(post_id),
-                FOREIGN KEY ($COL_TAG_CONTACT_ID) REFERENCES Contacts(contact_id)
+                $POSTTAG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $POSTTAG_POST_ID INTEGER,
+                $POSTTAG_CONTACT_ID INTEGER,
+                FOREIGN KEY ($POSTTAG_POST_ID) REFERENCES $POST_TABLE_NAME($POST_ID),
+                FOREIGN KEY ($POSTTAG_CONTACT_ID) REFERENCES $CONTACT_TABLE_NAME($CONTACT_ID)
             )
         """.trimIndent()
         db.execSQL(CREATE_POST_TAGS_TABLE)
@@ -106,27 +105,22 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     fun insertContact(name:String, phonenumber:String): Long {
         Log.d("DBhandler", "insert contact $name, $phonenumber")
         val values = ContentValues().apply {
-            put(COL_NAME, name)
-            put(COL_PHONENUM, phonenumber)
+            put(CONTACT_ID, name)
+            put(CONTACT_PHONENUM, phonenumber)
         }
         val db = writableDatabase
         return db.insert(CONTACT_TABLE_NAME, null, values)
     }
-    fun getContactIncludes(subString:String): ArrayList<ContactData> {
+    fun getContactIncludes(subStr:String): ArrayList<ContactData> {
         val contactList = ArrayList<ContactData>()
         val db = readableDatabase
-        val query = """
-            SELECT * FROM $CONTACT_TABLE_NAME 
-            WHERE REPLACE(REPLACE(REPLACE($COL_NAME, ' ', ''), '\n', ''), '\t', '') LIKE ? 
-            OR REPLACE(REPLACE(REPLACE($COL_PHONENUM, ' ', ''), '\n', ''), '\t', '') LIKE ?
-        """.trimIndent()
-        val cleanSubString = subString.replace("\\s".toRegex(), "")
-        val cursor = db.rawQuery(query, arrayOf("%$cleanSubString%", "%$cleanSubString%"))
+        val query = ("SELECT * FROM $CONTACT_TABLE_NAME WHERE $CONTACT_NAME LIKE ? OR $CONTACT_PHONENUM LIKE ?")
+        val cursor = db.rawQuery(query, arrayOf("%$subStr%", "%$subStr%"))
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CONTACT_ID))
-                val name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME))
-                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_PHONENUM))
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(CONTACT_ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
+                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_PHONENUM))
                 val contact = ContactData(id, name, phonenumber)
                 contactList.add(contact)
                 Log.d("ContactDB", "searched $name, $phonenumber")
@@ -134,6 +128,21 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         }
         cursor.close()
         return contactList
+    }
+    fun getContactNameList(contactIdList: ArrayList<Int>): String{
+        var contactNameList = arrayListOf<String>()
+        val db = readableDatabase
+        val query = ("SELECT * FROM $CONTACT_TABLE_NAME WHERE $CONTACT_ID = ?")
+        for (contactId in contactIdList){
+            val cursor = db.rawQuery(query, arrayOf(contactId.toString()))
+            if (cursor.moveToFirst()) {
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
+                contactNameList.add(name)
+            }
+            cursor.close()
+        }
+        db.close()
+        return contactNameList.joinToString(separator = ", ", prefix = "@") { "@$it" }
     }
     fun getAllContact(): ArrayList<ContactData>{
         val contactList = ArrayList<ContactData>()
@@ -143,9 +152,9 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CONTACT_ID))
-                val name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME))
-                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_PHONENUM))
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(CONTACT_ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
+                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_PHONENUM))
                 val contact = ContactData(id, name, phonenumber)
                 contactList.add(contact)
                 Log.d("DBread", "read $name, $phonenumber")
@@ -168,8 +177,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         Log.d("updateDB", "id: $id, name: $name, num: $phoneNumber")
         val contentValues = ContentValues()
         // contentValues.put(COL_ID, id)
-        contentValues.put(COL_NAME, name)
-        contentValues.put(COL_PHONENUM, phoneNumber)
+        contentValues.put(CONTACT_NAME, name)
+        contentValues.put(CONTACT_PHONENUM, phoneNumber)
 
         db.update(CONTACT_TABLE_NAME, contentValues, "id = ?", arrayOf(id.toString()))
         db.close()
@@ -180,7 +189,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         if (img == null) return -1
         Log.d("ImgDBhandler", "insert image")
         val values = ContentValues()
-        values.put(COL_IMG, bitmapToByteArray(img))
+        values.put(IMG_BLOB, bitmapToByteArray(img))
         val db = writableDatabase
         return db.insert(IMG_TABLE_NAME, null, values)
     }
@@ -192,11 +201,11 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     fun getImgById(id: Int?): Bitmap?{
         if (id==null) return null
         val db = readableDatabase
-        val query = ("SELECT $COL_IMG FROM $IMG_TABLE_NAME WHERE $COL_IMG_ID = ?")
+        val query = ("SELECT $IMG_BLOB FROM $IMG_TABLE_NAME WHERE $IMG_ID = ?")
         val cursor = db.rawQuery(query, arrayOf(id.toString()))
         var imgByteArray: ByteArray? = null
         if (cursor.moveToFirst()) {
-            imgByteArray = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_IMG))
+            imgByteArray = cursor.getBlob(cursor.getColumnIndexOrThrow(IMG_BLOB))
         }
         cursor.close()
         db.close()
@@ -211,9 +220,9 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_IMG_ID))
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(IMG_ID))
                 Log.d("ImgDBhanlder", "read $id image!")
-                val img = cursor.getBlob(cursor.getColumnIndexOrThrow(COL_IMG))
+                val img = cursor.getBlob(cursor.getColumnIndexOrThrow(IMG_BLOB))
                 val imgData = ImageData(id, byteArrayToBitmap(img))
                 imgDataList.add(imgData)
             } while (cursor.moveToNext())
@@ -225,16 +234,22 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun insertPost(post: PostData): Long{
-        Log.d("PostDBHandler", "insert contact ${post.content}, ${post.imageId}")
+        Log.d("PostDBHandler", "insert post ${post.content}, ${post.imageId}")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
         val values = ContentValues().apply {
-            put(COL_CONTENT, post.content)
-            put(COL_DATE, current)
-            put(COL_POST_IMG_ID, post.imageId)
+            put(POST_CONTENT, post.content)
+            put(POST_DATE, current)
+            put(POST_IMG_ID, post.imageId)
         }
         val db = writableDatabase
-        return db.insert(POST_TABLE_NAME, null, values)
+        val postId = db.insert(POST_TABLE_NAME, null, values)
+        // insert tags in TAG_TABLE_NAME
+        if (postId != -1L) {
+            for (contactId in post.tagIdList) insertTag(postId.toInt(), contactId)
+        } else Log.e("PostDBHandler", "Failed to insert post")
+
+        return postId
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -243,20 +258,22 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
         val postValues = ContentValues()
-        postValues.put(COL_CONTENT, post.content)
-        postValues.put(COL_DATE, current)
-        postValues.put(COL_POST_IMG_ID, post.imageId)
-
+        postValues.put(POST_CONTENT, post.content)
+        postValues.put(POST_DATE, current)
+        postValues.put(POST_IMG_ID, post.imageId)
         db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(post.id.toString()))
         db.close()
+
+        deleteTagByPostId(post.id)
+        for (contactId in post.tagIdList) insertTag(post.id, contactId)
     }
     fun deletePostById(postId: Int) {
         val readableDB = readableDatabase
-        val query = ("SELECT $COL_POST_IMG_ID FROM $POST_TABLE_NAME WHERE $COL_POST_ID = ?")
+        val query = ("SELECT $POST_IMG_ID FROM $POST_TABLE_NAME WHERE $POST_ID = ?")
         val cursor = readableDB.rawQuery(query, arrayOf(postId.toString()))
         val postImgId: Int
         if (cursor.moveToFirst()) {
-            postImgId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_IMG_ID))
+            postImgId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_IMG_ID))
             deleteImgById(postImgId)
         }
         cursor.close()
@@ -264,29 +281,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val writableDB = this.writableDatabase
         writableDB.delete(POST_TABLE_NAME, "id = ?", arrayOf(postId.toString()))
         writableDB.close()
-    }
-    fun getPostIncludes(subString:String): ArrayList<PostData> {
-        val postList = ArrayList<PostData>()
-        val db = readableDatabase
-        val query = """
-            SELECT * FROM $POST_TABLE_NAME 
-            WHERE REPLACE(REPLACE(REPLACE($COL_CONTENT, ' ', ''), '\n', ''), '\t', '') LIKE ? 
-        """.trimIndent()
-        val cleanSubString = subString.replace("\\s".toRegex(), "")
-        val cursor = db.rawQuery(query, arrayOf("%$cleanSubString%"))
-        if (cursor.moveToFirst()) {
-            do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_ID))
-                val content = cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT))
-                val date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE))
-                val imgId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_IMG_ID))
-                val post = PostData(id, content, date, imageId = imgId)
-                postList.add(post)
-                Log.d("PostDB", "searched $content, $imgId")
-            } while (cursor.moveToNext())
-        }
-        cursor.close()
-        return postList
+        deleteTagByPostId(postId)
     }
     // 포스트
     fun getAllPost() :ArrayList<PostData>{
@@ -298,13 +293,13 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor.moveToFirst()) {
             do {
-                val postId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_ID))
-                val content = cursor.getString(cursor.getColumnIndexOrThrow(COL_CONTENT))
-                val date = cursor.getString(cursor.getColumnIndexOrThrow(COL_DATE))
-                // val taggedId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TAG_LIST)) -> 리스트로 받아올 수 있도록
-                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_POST_IMG_ID))
+                val postId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_ID))
+                val content = cursor.getString(cursor.getColumnIndexOrThrow(POST_CONTENT))
+                val date = cursor.getString(cursor.getColumnIndexOrThrow(POST_DATE))
+                val tagList = getAllTagByPostId(postId)
+                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_IMG_ID))
 
-                val post = PostData(postId, content, date, taggedNameList = emptyList(), imageId)
+                val post = PostData(postId, content, date,tagList, imageId)
                 postList.add(post)
             } while (cursor.moveToNext())
         }
@@ -316,27 +311,12 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     }
 
 
-    // 태그를 하면 연락처의 창을 열어줌
-    fun getContactIdByName(contactName: String): Int? {
-        val db = this.readableDatabase
-        val query = "SELECT $COL_CONTACT_ID FROM $CONTACT_TABLE_NAME WHERE $COL_NAME = ?"
-        val cursor = db.rawQuery(query, arrayOf(contactName))
-        var contactId: Int? = null
-        val columnIndex = cursor.getColumnIndex(COL_CONTACT_ID)
-        if (columnIndex != -1 && cursor.moveToFirst()) {
-            contactId = cursor.getInt(columnIndex)
-        }
-        cursor.close()
-        db.close()
-        return contactId
-    }
-
     // C 태그 테이블에 새 레코드 삽입
-    fun insertTag(postId: Int, userId: Int): Long {
+    private fun insertTag(postId: Int, userId: Int): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put(COL_TAG_POST_ID, postId)
-            put(COL_TAG_CONTACT_ID, userId)
+            put(POSTTAG_POST_ID, postId)
+            put(POSTTAG_CONTACT_ID, userId)
         }
         val result = db.insert(POST_TAGS_TABLE_NAME, null, values)
         db.close()
@@ -344,14 +324,26 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     }
 
 
-    //R
-
-    //U
+    private fun getAllTagByPostId(postId: Int): ArrayList<Int> {
+        val tagList = ArrayList<Int>()
+        val db = this.readableDatabase
+        val query = ("SELECT * FROM $POST_TAGS_TABLE_NAME WHERE $POSTTAG_POST_ID LIKE ?")
+        val cursor = db.rawQuery(query, arrayOf("$postId"))
+        if (cursor.moveToFirst()) {
+            do {
+                val contactId = cursor.getInt(cursor.getColumnIndexOrThrow(POSTTAG_CONTACT_ID))
+                tagList.add(contactId)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return tagList
+    }
 
     //D
-    fun deleteTag(postTagId: Int): Int {
+    private fun deleteTagByPostId(postId: Int): Int {
         val db = this.writableDatabase
-        val result = db.delete(POST_TAGS_TABLE_NAME, "$COL_POSTTAG_ID = ?", arrayOf(postTagId.toString()))
+        val result = db.delete(POST_TAGS_TABLE_NAME, "$POSTTAG_ID = ?", arrayOf(postId.toString()))
         db.close()
         return result
     }

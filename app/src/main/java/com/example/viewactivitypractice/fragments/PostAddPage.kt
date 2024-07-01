@@ -94,8 +94,8 @@ class PostAddPage : Fragment() {
             requestCameraPermission.launch(android.Manifest.permission.CAMERA)
         } else { // 권한이 있는 경우
             Log.d("postCam", "we have camera permission")
-            val takePictueByCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(takePictueByCamera, takePicture)
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            takePictureByCamera.launch(takePictureIntent)
         }
     }
     private fun pickFromGallery(){
@@ -109,37 +109,34 @@ class PostAddPage : Fragment() {
         } else { // 권한이 있는 경우
             Log.d("postCam", "we have gallery access permission")
             val pickUpImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(pickUpImgFromGallery, pickupimage)
+            pickImageFromGallery.launch(pickUpImgFromGallery)
         }
     }
-    // 사진 가져오면 imgData에 추가하기
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode){
-            pickupimage -> {
-                if (resultCode == RESULT_OK) {
-                    val ImageURI: Uri? = data?.data
-                    Log.d("IMG_PICK", "successfully picked an img, $ImageURI")
-                    bitImg = uriToBitmap(ImageURI, requireActivity())
-                    if (bitImg!=null) imgView.setImageBitmap(bitImg)
-                }
-            }
-            takePicture -> {
-                if (resultCode == RESULT_OK){
-                    bitImg = data?.extras?.get("data") as Bitmap
-                    Log.d("CAMERA", "successfully took a picture, $bitImg")
-                    if (bitImg!=null) imgView.setImageBitmap(bitImg)
-                }
-            }
+    private val pickImageFromGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val imageUri: Uri? = result.data?.data
+            Log.d("IMG_PICK", "Successfully picked an img, $imageUri")
+            bitImg = uriToBitmap(imageUri, requireActivity())
+            bitImg?.let { imgView.setImageBitmap(it) }
+            Log.d("IMG_PICK", "bitImg: $bitImg")
         }
     }
+    private val takePictureByCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val imageBitmap = result.data?.extras?.get("data") as Bitmap
+            Log.d("CAMERA", "Successfully took a picture, $imageBitmap")
+            bitImg = imageBitmap
+            bitImg?.let { imgView.setImageBitmap(it) }
+            Log.d("CAMERA", "bitImg: $bitImg")
+        }
+    }
+
     private  val requestCameraPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()) { isGranted ->
         when(isGranted) {
             true -> {
                 Toast.makeText(requireContext(),"카메라 권한 허가",Toast.LENGTH_SHORT).show()
-                val takePictueByCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(takePictueByCamera, takePicture)}
+                startCamera()}
             false -> {
                 Toast.makeText(requireContext(),"카메라 권한 거부", Toast.LENGTH_SHORT).show()
             }
@@ -150,8 +147,7 @@ class PostAddPage : Fragment() {
         when(isGranted) {
             true -> {
                 Toast.makeText(requireContext(),"갤러리 권한 허가",Toast.LENGTH_SHORT).show()
-                val pickUpImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                startActivityForResult(pickUpImgFromGallery, pickupimage)}
+                pickFromGallery()}
             false -> {
                 Toast.makeText(requireContext(),"갤러리 권한 거부", Toast.LENGTH_SHORT).show()
             }

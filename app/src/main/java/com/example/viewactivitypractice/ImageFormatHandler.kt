@@ -10,7 +10,7 @@ import java.io.InputStream
 // bitmap to BLOB
 fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
     val stream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+    bitmap.compress(Bitmap.CompressFormat.PNG, 10, stream)
     return stream.toByteArray()
 }
 // BLOB to bitmap
