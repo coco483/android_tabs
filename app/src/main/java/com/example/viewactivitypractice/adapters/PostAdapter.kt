@@ -1,5 +1,6 @@
 package com.example.viewactivitypractice.adapters
 
+import android.graphics.Bitmap
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -33,8 +34,8 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
         holder.itemView.setOnClickListener { onClick(currentItem) }
         holder.content.text = currentItem.content
         holder.date.text = currentItem.date
-        val bitImg = myDB.getImgById(currentItem.imageId)
-        holder.img.setImageBitmap(bitImg)
+        val bitImg: Bitmap? = myDB.getImgById(currentItem.imageId)
+        bitImg?.let{holder.img.setImageBitmap(it)}
 
         /*// 태그 처리
         val spannableString = SpannableString(currentItem.taggedNameList.joinToString(" ") { "@$it" })

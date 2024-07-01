@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.datas.ImageData
+import com.example.viewactivitypractice.getBitmapFromPath
 
 class ImageAdapter(private val imgList: ArrayList<ImageData>)
     : RecyclerView.Adapter<ImageAdapter.ImgViewHolder>(){
@@ -17,7 +18,8 @@ class ImageAdapter(private val imgList: ArrayList<ImageData>)
     }
     override fun onBindViewHolder(holder: ImgViewHolder, position: Int) {
         val currentItem = imgList[position]
-        holder.img.setImageBitmap(currentItem.img)
+        val bitImg = getBitmapFromPath(currentItem.imgPath)
+        holder.img.setImageBitmap(bitImg)
     }
     override fun getItemCount(): Int {
         return imgList.size

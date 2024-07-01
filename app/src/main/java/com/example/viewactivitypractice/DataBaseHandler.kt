@@ -25,7 +25,7 @@ private const val CONTACT_PHONENUM = "phonenumber"
 // for Gallery
 private const val IMG_TABLE_NAME = "Images"
 private const val IMG_ID = "id"
-private const val IMG_BLOB = "image"
+private const val IMG_PATH = "image_path"
 // for Post
 private const val POST_TABLE_NAME = "Posts"
 private const val POST_ID = "id"
@@ -60,7 +60,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         Log.d("ImgDBhandler", "img db create table")
         val createImgTableQuery = ("CREATE TABLE $IMG_TABLE_NAME (" +
                 "$IMG_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "$IMG_BLOB BLOB)")
+                "$IMG_PATH VARCHAR)")
         db!!.execSQL(createImgTableQuery)
     }
 
@@ -185,11 +185,10 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     // 이미지 추가하기
-    fun insertImg(img: Bitmap?): Long {
-        if (img == null) return -1
-        Log.d("ImgDBhandler", "insert image")
+    fun insertImg(imgPath: String): Long {
+        Log.d("ImgDBhandler", "insert image in path $imgPath")
         val values = ContentValues()
-        values.put(IMG_BLOB, bitmapToByteArray(img))
+        values.put(IMG_PATH, imgPath)
         val db = writableDatabase
         return db.insert(IMG_TABLE_NAME, null, values)
     }
@@ -201,16 +200,16 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     fun getImgById(id: Int?): Bitmap?{
         if (id==null) return null
         val db = readableDatabase
-        val query = ("SELECT $IMG_BLOB FROM $IMG_TABLE_NAME WHERE $IMG_ID = ?")
+        val query = ("SELECT $IMG_PATH FROM $IMG_TABLE_NAME WHERE $IMG_ID = ?")
         val cursor = db.rawQuery(query, arrayOf(id.toString()))
-        var imgByteArray: ByteArray? = null
+        var imgPath: String? = null
         if (cursor.moveToFirst()) {
-            imgByteArray = cursor.getBlob(cursor.getColumnIndexOrThrow(IMG_BLOB))
+            imgPath = cursor.getString(cursor.getColumnIndexOrThrow(IMG_PATH))
         }
         cursor.close()
         db.close()
-        if (imgByteArray == null) return null
-        return byteArrayToBitmap(imgByteArray)
+        if (imgPath == null) return null
+        return getBitmapFromPath(imgPath)
     }
     fun getAllImg(): ArrayList<ImageData>{
         val imgDataList = ArrayList<ImageData>()
@@ -222,8 +221,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
             do {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(IMG_ID))
                 Log.d("ImgDBhanlder", "read $id image!")
-                val img = cursor.getBlob(cursor.getColumnIndexOrThrow(IMG_BLOB))
-                val imgData = ImageData(id, byteArrayToBitmap(img))
+                val imgPath = cursor.getString(cursor.getColumnIndexOrThrow(IMG_PATH))
+                val imgData = ImageData(id, imgPath)
                 imgDataList.add(imgData)
             } while (cursor.moveToNext())
         }

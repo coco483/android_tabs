@@ -28,8 +28,9 @@ import com.example.viewactivitypractice.DataBaseHandler
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.datas.PostData
+import com.example.viewactivitypractice.getBitmapFromPath
 import com.example.viewactivitypractice.uriToBitmap
-
+import com.example.viewactivitypractice.saveBitmapToInternalStorage
 /**
  * A simple [Fragment] subclass.
  * Use the [PostAddPage.newInstance] factory method to
@@ -73,8 +74,9 @@ class PostAddPage : Fragment() {
             if (content.length == 0) {
                 Toast.makeText(requireContext(), "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
             } else {
-                imgId = myDB.insertImg(bitImg).toInt()
-                Log.d("PostAddImg", "id $imgId added")
+                val imgPath = bitImg?.let{bitimg -> saveBitmapToInternalStorage(requireContext(),bitimg)}
+                imgId = imgPath?.let { it1 -> myDB.insertImg(it1).toInt() }
+                Log.d("PostAddImg", "id $imgId added to $imgPath")
                 myDB.insertPost(PostData(-1, content, "", imageId = imgId))
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
             }
@@ -99,13 +101,18 @@ class PostAddPage : Fragment() {
         }
     }
     private fun pickFromGallery(){
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            android.Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        }
         val galleryPermissionCheck = ContextCompat.checkSelfPermission(
             requireContext(),
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
+            permission
         )
         if (galleryPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
             Log.d("postCam", "request for gallery access permission")
-            requestGalleryPermission.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            requestGalleryPermission.launch(permission)
         } else { // 권한이 있는 경우
             Log.d("postCam", "we have gallery access permission")
             val pickUpImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -127,6 +134,7 @@ class PostAddPage : Fragment() {
             Log.d("CAMERA", "Successfully took a picture, $imageBitmap")
             bitImg = imageBitmap
             bitImg?.let { imgView.setImageBitmap(it) }
+
             Log.d("CAMERA", "bitImg: $bitImg")
         }
     }
