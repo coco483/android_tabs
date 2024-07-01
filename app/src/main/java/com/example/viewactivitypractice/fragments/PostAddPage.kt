@@ -2,6 +2,7 @@ package com.example.viewactivitypractice.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -36,6 +37,7 @@ class PostAddPage : Fragment() {
     private lateinit var myDB: DataBaseHandler
     private val pickupimage = 100
     private val takePicture = 101
+    private val cameraRequestCode = 1000
     private var bitImg : Bitmap? = null
     private var imgId: Int? = null
     private lateinit var imgView : ImageView
@@ -51,30 +53,17 @@ class PostAddPage : Fragment() {
         val uploadBtn = view.findViewById<Button>(R.id.post_upload_btn)
         val cancelBtn = view.findViewById<Button>(R.id.post_cancel_btn)
         imgView = view.findViewById<ImageView>(R.id.post_imageView)
-        /*
-        imgView.setOnClickListener{
-            val pickupImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(pickupImgFromGallery, pickupimage)
-        }
-         */
         imgView.setOnClickListener {
-            val cameraPermissionCheck = ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.CAMERA
-            )
-
-            if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
-                Log.d("postCam", "request for camera permission")
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(android.Manifest.permission.CAMERA),
-                    1000
-                )
-            } else { // 권한이 있는 경우
-                Log.d("postCam", "we have camera permission")
-                val takePictueByCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(takePictueByCamera, takePicture)
-            }
+            val options = arrayOf("Take Photo", "Choose from Gallery")
+            AlertDialog.Builder(requireContext())
+                .setTitle("Select Image Source")
+                .setItems(options) { dialog, which ->
+                    when (which) {
+                        0 -> startCamera()
+                        1 -> pickFromGallery()
+                    }
+                }
+                .show()
         }
 
         uploadBtn.setOnClickListener{
@@ -92,6 +81,28 @@ class PostAddPage : Fragment() {
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
         }
         return view
+    }
+    private fun startCamera(){
+        val cameraPermissionCheck = ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.CAMERA
+        )
+        if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            Log.d("postCam", "request for camera permission")
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(android.Manifest.permission.CAMERA),
+                cameraRequestCode
+            )
+        } else { // 권한이 있는 경우
+            Log.d("postCam", "we have camera permission")
+            val takePictueByCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(takePictueByCamera, takePicture)
+        }
+    }
+    private fun pickFromGallery(){
+        val pickupImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(pickupImgFromGallery, pickupimage)
     }
     // 사진 가져오면 imgData에 추가하기
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -121,7 +132,7 @@ class PostAddPage : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1000) {
+        if (requestCode == cameraRequestCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val takePictueByCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 startActivityForResult(takePictueByCamera, takePicture)
