@@ -45,13 +45,6 @@ class GalleryTab : Fragment() {
         myDB = (activity as MainActivity).mydb
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.gallery_tab_fragment, container, false)
-        val addBtn = view.findViewById<Button>(R.id.pick_img_button)
-        addBtn.setOnClickListener{
-            // 갤러리에서 사진 가져오기
-            val pickupImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(pickupImgFromGallery, pickupimage)
-
-        }
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,17 +56,6 @@ class GalleryTab : Fragment() {
         recyclerView.adapter = ImageAdapter(imgDataList)
     }
 
-    // 사진 가져오면 imgData에 추가하기
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == pickupimage){
-            ImageURI = data?.data
-            Log.d("IMG_PICK", "successfully picked an img")
-            //imgDataList.add(ImageData(484, uriToBitmap(ImageURI)) )
-            myDB.insertImg(uriToBitmap(ImageURI, requireActivity()))
-        }
-        parentFragmentManager.beginTransaction().replace(R.id.blank_container, GalleryTab()).commit()
-    }
     private fun imgDataInitialize() {
         imgDataList = myDB.getAllImg()
     }
