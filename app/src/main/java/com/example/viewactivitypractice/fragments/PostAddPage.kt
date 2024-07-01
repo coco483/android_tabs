@@ -15,10 +15,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.PermissionRequest
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -89,11 +91,7 @@ class PostAddPage : Fragment() {
         )
         if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
             Log.d("postCam", "request for camera permission")
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(android.Manifest.permission.CAMERA),
-                cameraRequestCode
-            )
+            requestCameraPermission.launch(android.Manifest.permission.CAMERA)
         } else { // 권한이 있는 경우
             Log.d("postCam", "we have camera permission")
             val takePictueByCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -101,8 +99,18 @@ class PostAddPage : Fragment() {
         }
     }
     private fun pickFromGallery(){
-        val pickupImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        startActivityForResult(pickupImgFromGallery, pickupimage)
+        val galleryPermissionCheck = ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        if (galleryPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            Log.d("postCam", "request for gallery access permission")
+            requestGalleryPermission.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        } else { // 권한이 있는 경우
+            Log.d("postCam", "we have gallery access permission")
+            val pickUpImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(pickUpImgFromGallery, pickupimage)
+        }
     }
     // 사진 가져오면 imgData에 추가하기
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -125,21 +133,30 @@ class PostAddPage : Fragment() {
             }
         }
     }
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == cameraRequestCode) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    private  val requestCameraPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()) { isGranted ->
+        when(isGranted) {
+            true -> {
+                Toast.makeText(requireContext(),"카메라 권한 허가",Toast.LENGTH_SHORT).show()
                 val takePictueByCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(takePictueByCamera, takePicture)
-            } else { // 거부
-                Toast.makeText(requireContext(), "카메라 권한 거부", Toast.LENGTH_SHORT).show()
+                startActivityForResult(takePictueByCamera, takePicture)}
+            false -> {
+                Toast.makeText(requireContext(),"카메라 권한 거부", Toast.LENGTH_SHORT).show()
             }
         }
     }
+    private  val requestGalleryPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()) { isGranted ->
+        when(isGranted) {
+            true -> {
+                Toast.makeText(requireContext(),"갤러리 권한 허가",Toast.LENGTH_SHORT).show()
+                val pickUpImgFromGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                startActivityForResult(pickUpImgFromGallery, pickupimage)}
+            false -> {
+                Toast.makeText(requireContext(),"갤러리 권한 거부", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
 }
