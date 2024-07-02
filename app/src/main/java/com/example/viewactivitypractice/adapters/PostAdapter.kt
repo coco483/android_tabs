@@ -60,7 +60,7 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
             val contactName = contact?.name
 
             if (contactName != null) {
-                spannable.append(contactName)
+                spannable.append("@$contactName")
                 Log.d("spannable", "id: $contactId name: $contactName")
 
                 // Apply styles

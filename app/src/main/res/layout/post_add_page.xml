@@ -51,8 +51,9 @@
                 android:id="@+id/tag_list_TV"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:background="#00FF00"
-                android:text="taglist"
+                android:background="#EDEDED"
+                android:gravity="center_vertical"
+                android:hint="tag your friend!"
                 app:layout_constraintBottom_toTopOf="@+id/tag_AutoTV"
                 app:layout_constraintTop_toBottomOf="@+id/content_ET"
                 tools:layout_editor_absoluteX="28dp"
@@ -89,7 +90,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/post_cancel_btn"
+            android:id="@+id/post_delete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
@@ -99,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
         <Button
-            android:id="@+id/post_upload_btn"
+            android:id="@+id/post_Edit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Upload"
