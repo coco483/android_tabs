@@ -46,6 +46,7 @@ class PostAddPage : Fragment() {
     private var imgId: Int? = null
     private lateinit var imgView : ImageView
     private lateinit var contactList : Array<ContactData>
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,8 +74,9 @@ class PostAddPage : Fragment() {
         }
         // autocomplete tag search
         val tagList = view.findViewById<TextView>(R.id.tag_list_TV)
-        tagList.setText("Hello world! I am tagList")
-        var tagListStr : String = ""
+        var tagText = tagList.text.toString()
+        tagList.setText("")
+        val tagListStrList : ArrayList<String> = arrayListOf()
         val tagAutoComplete = view.findViewById<AutoCompleteTextView>(R.id.tag_AutoTV)
         setContactList()
         val tagAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, contactList)
@@ -83,8 +85,9 @@ class PostAddPage : Fragment() {
             val item = parent.getItemAtPosition(position)
             if (item is ContactData) {
                 Log.d("PostTag", "clicked ${item.name}")
-                tagListStr += item.name
-                tagList.text = tagListStr
+                tagListStrList.add(item.name)
+                tagText += (item.name + " ")
+                tagList.text = tagText
                 tagIdList += item.id
             }
             tagAutoComplete.text = null
