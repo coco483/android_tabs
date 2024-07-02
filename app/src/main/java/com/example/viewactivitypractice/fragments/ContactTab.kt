@@ -42,21 +42,21 @@ class ContactTab : Fragment() {
         searchBtn.setOnClickListener{
             val searchText = view.findViewById<EditText>(R.id.contact_search_ET).text.toString()
             contactDataList = myDB.getContactIncludes(searchText)
-            setRecyclerView(view)
+            setRecyclerView(view, contactDataList)
         }
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dataInitialize()
-        setRecyclerView(view)
+        contactDataList = myDB.getAllContact()
+        setRecyclerView(view, contactDataList)
     }
-    private fun setRecyclerView(view: View){
+    fun setRecyclerView(view: View, contactDatas: ArrayList<ContactData>){
         recyclerView = view.findViewById(R.id.numRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = ContactAdapter(contactDataList) { contact ->
+        recyclerView.adapter = ContactAdapter(contactDatas) { contact ->
             // 클릭된 아이템의 연락처 정보를 ContactDetailPage 프래그먼트에 전달
             val detailFragment = ContactDetailPage().apply {
                 arguments = Bundle().apply {
@@ -70,10 +70,5 @@ class ContactTab : Fragment() {
                 .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
                 .commit()
         }
-    }
-    private fun dataInitialize() {
-        //val jsonString = readJsonFromAssets(requireActivity(), "contact_info.json")
-        //contactDataList = parseJsonToNumberDatas(jsonString)
-        contactDataList = myDB.getAllContact()
     }
 }

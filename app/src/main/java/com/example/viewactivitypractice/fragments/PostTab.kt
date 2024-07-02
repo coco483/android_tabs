@@ -49,14 +49,14 @@ class PostTab : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
-        setRecyclerView(view)
+        setPostRecyclerView(view, postDataList)
 
     }
-    private fun setRecyclerView(view: View) {
+    fun setPostRecyclerView(view: View, postDatas: ArrayList<PostData>) {
         recyclerView = view.findViewById(R.id.postRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = PostAdapter(myDB, postDataList) { post ->
+        recyclerView.adapter = PostAdapter(myDB, postDatas) { post ->
             // 클릭된 아이템의 연락처 정보를 PostDetailPage 프래그먼트에 전달
             val detailPage = PostDetailPage().apply {
                 arguments = Bundle().apply {

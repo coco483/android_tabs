@@ -16,9 +16,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.PermissionRequest
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -27,6 +30,7 @@ import androidx.core.content.ContextCompat
 import com.example.viewactivitypractice.DataBaseHandler
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
+import com.example.viewactivitypractice.datas.ContactData
 import com.example.viewactivitypractice.datas.PostData
 import com.example.viewactivitypractice.getBitmapFromPath
 import com.example.viewactivitypractice.uriToBitmap
@@ -38,13 +42,10 @@ import com.example.viewactivitypractice.saveBitmapToInternalStorage
  */
 class PostAddPage : Fragment() {
     private lateinit var myDB: DataBaseHandler
-    private val pickupimage = 100
-    private val takePicture = 101
-    private val cameraRequestCode = 1000
     private var bitImg : Bitmap? = null
     private var imgId: Int? = null
     private lateinit var imgView : ImageView
-
+    private lateinit var contactList : Array<ContactData>
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,8 +54,10 @@ class PostAddPage : Fragment() {
         // Inflate the layout for this fragment
         myDB = (activity as MainActivity).mydb
         val view =  inflater.inflate(R.layout.post_add_page, container, false)
+        var tagIdList: ArrayList<Int> = arrayListOf<Int>()
         val uploadBtn = view.findViewById<Button>(R.id.post_upload_btn)
         val cancelBtn = view.findViewById<Button>(R.id.post_cancel_btn)
+        // start camera or open gallery when user clicks image
         imgView = view.findViewById<ImageView>(R.id.post_imageView)
         imgView.setOnClickListener {
             val options = arrayOf("Take Photo", "Choose from Gallery")
@@ -68,7 +71,26 @@ class PostAddPage : Fragment() {
                 }
                 .show()
         }
+        // autocomplete tag search
+        val tagList = view.findViewById<TextView>(R.id.tag_list_TV)
+        tagList.setText("Hello world! I am tagList")
+        var tagListStr : String = ""
+        val tagAutoComplete = view.findViewById<AutoCompleteTextView>(R.id.tag_AutoTV)
+        setContactList()
+        val tagAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, contactList)
+        tagAutoComplete.setAdapter(tagAdapter)
+        tagAutoComplete.setOnItemClickListener { parent, _, position, _ ->
+            val item = parent.getItemAtPosition(position)
+            if (item is ContactData) {
+                Log.d("PostTag", "clicked ${item.name}")
+                tagListStr += item.name
+                tagList.text = tagListStr
+                tagIdList += item.id
+            }
+            tagAutoComplete.text = null
 
+        }
+        // insert to DB and go back to PostTab()
         uploadBtn.setOnClickListener{
             val content = view.findViewById<EditText>(R.id.content_ET).text.toString()
             if (content.length == 0) {
@@ -77,7 +99,7 @@ class PostAddPage : Fragment() {
                 val imgPath = bitImg?.let{bitimg -> saveBitmapToInternalStorage(requireContext(),bitimg)}
                 imgId = imgPath?.let { it1 -> myDB.insertImg(it1).toInt() }
                 Log.d("PostAddImg", "id $imgId added to $imgPath")
-                myDB.insertPost(PostData(-1, content, "", imageId = imgId))
+                myDB.insertPost(PostData(-1, content, "", tagIdList, imgId))
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
             }
         }
@@ -85,6 +107,10 @@ class PostAddPage : Fragment() {
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
         }
         return view
+    }
+    private fun setContactList(){
+        val allContact = myDB.getAllContact()
+        contactList = allContact.toArray(arrayOfNulls<ContactData>(allContact.size))
     }
     private fun startCamera(){
         val cameraPermissionCheck = ContextCompat.checkSelfPermission(

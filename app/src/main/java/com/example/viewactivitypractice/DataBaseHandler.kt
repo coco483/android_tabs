@@ -105,7 +105,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     fun insertContact(name:String, phonenumber:String): Long {
         Log.d("DBhandler", "insert contact $name, $phonenumber")
         val values = ContentValues().apply {
-            put(CONTACT_ID, name)
+            put(CONTACT_NAME, name)
             put(CONTACT_PHONENUM, phonenumber)
         }
         val db = writableDatabase
@@ -142,7 +142,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
             cursor.close()
         }
         db.close()
-        return contactNameList.joinToString(separator = ", ", prefix = "@") { "@$it" }
+        return contactNameList.joinToString(separator = ", ") { "@$it" }
     }
     fun getAllContact(): ArrayList<ContactData>{
         val contactList = ArrayList<ContactData>()
@@ -282,6 +282,42 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         writableDB.delete(POST_TABLE_NAME, "id = ?", arrayOf(postId.toString()))
         writableDB.close()
         deleteTagByPostId(postId)
+    }
+    private fun getPostIdByContactId(contactId: Int): ArrayList<Int>{
+        val postIdList = ArrayList<Int>()
+        val db = this.readableDatabase
+        val query = ("SELECT * FROM $POST_TAGS_TABLE_NAME WHERE $POSTTAG_CONTACT_ID LIKE ?")
+        val cursor = db.rawQuery(query, arrayOf("$contactId"))
+        if (cursor.moveToFirst()) {
+            do {
+                val postId = cursor.getInt(cursor.getColumnIndexOrThrow(POSTTAG_POST_ID))
+                postIdList.add(postId)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return postIdList
+    }
+    fun getPostByContactId(contactId: Int): ArrayList<PostData>{
+        val postList = ArrayList<PostData>()
+        val postIdList = getPostIdByContactId(contactId)
+
+        val query = ("SELECT * FROM $POST_TABLE_NAME WHERE $POST_ID = ?")
+        for (postId in postIdList){
+            val db = this.readableDatabase
+            val cursor = db.rawQuery(query, arrayOf(postId.toString()))
+            if (cursor.moveToFirst()) {
+                val content = cursor.getString(cursor.getColumnIndexOrThrow(POST_CONTENT))
+                val date = cursor.getString(cursor.getColumnIndexOrThrow(POST_DATE))
+                val tagList = getAllTagByPostId(postId)
+                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_IMG_ID))
+                val post = PostData(postId, content, date,tagList, imageId)
+                postList.add(post)
+            }
+            cursor.close()
+            db.close()
+        }
+        return postList
     }
     // 포스트
     fun getAllPost() :ArrayList<PostData>{

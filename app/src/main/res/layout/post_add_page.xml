@@ -12,6 +12,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="15dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/content_ET"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -24,29 +25,33 @@
         android:layout_height="121dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="436dp"
+        android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="Content"
         android:inputType="text"
         android:text=""
-        app:layout_constraintBottom_toTopOf="@+id/tag_ET"
+        app:layout_constraintTop_toBottomOf="@+id/post_imageView"
+        app:layout_constraintBottom_toTopOf="@+id/tag_AutoTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <AutoCompleteTextView
-        android:id="@+id/tag_ET"
+        android:id="@+id/tag_AutoTV"
         android:layout_width="249dp"
         android:layout_height="42dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="text"
-        android:completionHint="이름을 입력하세요"
+        android:hint="이름을 입력하세요"
+        android:dropDownAnchor="@+id/tag_AutoTV"
+        android:dropDownHeight="500dp"
         android:completionThreshold="1"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_ET" />
+        app:layout_constraintTop_toBottomOf="@+id/tag_list_TV"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <Button
         android:id="@+id/post_upload_btn"
@@ -72,7 +77,7 @@
         android:id="@+id/text_date"
         android:layout_width="169dp"
         android:layout_height="27dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
         android:gravity="center"
         android:text="YYYY/MM/DD HH:MM:SS"
@@ -81,19 +86,16 @@
         app:layout_constraintStart_toEndOf="@+id/post_cancel_btn"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/tag_add_btn"
-        android:layout_width="89dp"
-        android:layout_height="46dp"
-        android:text="Button"
-        tools:layout_editor_absoluteX="287dp"
-        tools:layout_editor_absoluteY="619dp" />
-
     <TextView
         android:id="@+id/tag_list_TV"
         android:layout_width="359dp"
         android:layout_height="42dp"
         android:text="taglist"
+        android:background="#00FF00"
         tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="569dp" />
+        tools:layout_editor_absoluteY="569dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_ET"
+        app:layout_constraintBottom_toTopOf="@+id/tag_AutoTV" />
 </androidx.constraintlayout.widget.ConstraintLayout>

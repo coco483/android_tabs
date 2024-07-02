@@ -5,6 +5,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +37,7 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
         holder.date.text = currentItem.date
         val bitImg: Bitmap? = myDB.getImgById(currentItem.imageId)
         bitImg?.let{holder.img.setImageBitmap(it)}
-
+        holder.taggedName.text = myDB.getContactNameList(currentItem.tagIdList)
         /*// 태그 처리
         val spannableString = SpannableString(currentItem.taggedNameList.joinToString(" ") { "@$it" })
         currentItem.taggedNameList.forEach { tagName ->
