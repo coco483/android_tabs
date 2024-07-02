@@ -37,6 +37,12 @@ class PostTab : Fragment() {
         postAddBtn.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostAddPage()).commit()
         }
+        val searchBtn = view.findViewById<ImageButton>(R.id.post_search_btn)
+        searchBtn.setOnClickListener{
+            val searchText = view.findViewById<EditText>(R.id.post_search_ET).text.toString()
+            postDataList = myDB.getPostIncludes(searchText)
+            setPostRecyclerView(view, postDataList)
+        }
         return view
     }
 
@@ -44,7 +50,6 @@ class PostTab : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
         setPostRecyclerView(view, postDataList)
-
     }
     fun setPostRecyclerView(view: View, postDatas: ArrayList<PostData>) {
         recyclerView = view.findViewById(R.id.postRecycler)

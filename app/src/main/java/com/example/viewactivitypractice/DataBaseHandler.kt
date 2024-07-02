@@ -335,6 +335,33 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         }
         return postList
     }
+
+/*    // for Post
+    private const val POST_TABLE_NAME = "Posts"
+    private const val POST_ID = "id"
+    private const val POST_CONTENT = "content"
+    private const val POST_DATE = "date"
+    private const val POST_IMG_ID = "image_id"*/
+
+    // 포스트 검색
+    fun getPostIncludes(subStr:String): ArrayList<PostData> {
+        val postList = ArrayList<PostData>()
+        val db = readableDatabase
+        val query = ("SELECT * FROM $POST_TABLE_NAME WHERE $POST_CONTENT LIKE ?")
+        val cursor = db.rawQuery(query, arrayOf("%$subStr%"))
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(POST_ID))
+                val content = cursor.getString(cursor.getColumnIndexOrThrow(POST_CONTENT))
+                val date = cursor . getString (cursor.getColumnIndexOrThrow(POST_DATE))
+                val img = cursor.getInt(cursor.getColumnIndexOrThrow(POST_IMG_ID))
+                val post = PostData(id, content, date, img)
+                postList.add(post)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return postList
+    }
     // 포스트
     fun getAllPost() :ArrayList<PostData>{
 
