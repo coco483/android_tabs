@@ -10,4 +10,5 @@ class ContactData() {
         this.name = name
         this.phonenumber = phonenumber
     }
+    override fun toString(): String = this.name
 }

@@ -259,7 +259,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val postValues = ContentValues()
         postValues.put(POST_CONTENT, post.content)
         postValues.put(POST_DATE, current)
-        postValues.put(POST_IMG_ID, post.imageId)
+        post.imageId?.let {postValues.put(POST_IMG_ID, it)}
+        //postValues.put(POST_IMG_ID, post.imageId)
         db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(post.id.toString()))
         db.close()
 
