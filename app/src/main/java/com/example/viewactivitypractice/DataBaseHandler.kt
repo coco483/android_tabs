@@ -248,7 +248,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun insertPost(post: PostData): Long{
+    fun insertPost(post: PostData, tagIdSet: Set<Int>): Long{
         Log.d("PostDBHandler", "insert post ${post.content}, ${post.imageId}")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
@@ -261,7 +261,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val postId = db.insert(POST_TABLE_NAME, null, values)
         // insert tags in TAG_TABLE_NAME
         if (postId != -1L) {
-            for (contactId in post.tagIdList) insertTag(postId.toInt(), contactId)
+            for (tagId in tagIdSet) insertTag(postId.toInt(), tagId)
         } else Log.e("PostDBHandler", "Failed to insert post")
 
         return postId
@@ -281,7 +281,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
 
         deleteTagByPostId(post.id)
-        for (contactId in post.tagIdList) insertTag(post.id, contactId)
+        // for (contactId in post.tagIdList) insertTag(post.id, contactId)
     }
     fun deletePostById(postId: Int) {
         val readableDB = readableDatabase
@@ -325,9 +325,9 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
             if (cursor.moveToFirst()) {
                 val content = cursor.getString(cursor.getColumnIndexOrThrow(POST_CONTENT))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow(POST_DATE))
-                val tagList = getAllTagByPostId(postId)
+                // val tagList = getAllTagByPostId(postId)
                 val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_IMG_ID))
-                val post = PostData(postId, content, date,tagList, imageId)
+                val post = PostData(postId, content, date,/*tagList, */imageId)
                 postList.add(post)
             }
             cursor.close()
@@ -348,10 +348,10 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val postId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_ID))
                 val content = cursor.getString(cursor.getColumnIndexOrThrow(POST_CONTENT))
                 val date = cursor.getString(cursor.getColumnIndexOrThrow(POST_DATE))
-                val tagList = getAllTagByPostId(postId)
+                // val tagList = getAllTagByPostId(postId)
                 val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_IMG_ID))
 
-                val post = PostData(postId, content, date,tagList, imageId)
+                val post = PostData(postId, content, date,/*tagList, */imageId)
                 postList.add(post)
             } while (cursor.moveToNext())
         }
@@ -375,31 +375,29 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         return result
     }
 
-
-    private fun getAllTagByPostId(postId: Int): ArrayList<Int> {
-        val tagList = ArrayList<Int>()
+    // 조회
+    fun getAllContactIdByPostId(postId: Int): Set<Int> { // post id를 받아서 포함된 모든 contact Id 반환
+        val tagSet: MutableSet<Int> = mutableSetOf() // MutableSet 사용
         val db = this.readableDatabase
-        val query = ("SELECT * FROM $POST_TAGS_TABLE_NAME WHERE $POSTTAG_POST_ID LIKE ?")
+        val query = "SELECT * FROM $POST_TAGS_TABLE_NAME WHERE $POSTTAG_POST_ID = ?"
         val cursor = db.rawQuery(query, arrayOf("$postId"))
         if (cursor.moveToFirst()) {
             do {
                 val contactId = cursor.getInt(cursor.getColumnIndexOrThrow(POSTTAG_CONTACT_ID))
-                tagList.add(contactId)
+                tagSet.add(contactId) // 값 추가
+                Log.d("tegSet update check", "current item : $contactId")
             } while (cursor.moveToNext())
         }
         cursor.close()
         db.close()
-        return tagList
+        return tagSet
     }
 
 
-    fun getContactByTagId(tagId: Int): ContactData? {
+    fun getContactByContactId(tagId: Int): ContactData? {
         val db = this.readableDatabase
         val selectQuery = """
-            SELECT * FROM $CONTACT_TABLE_NAME c 
-            JOIN $POST_TAGS_TABLE_NAME t 
-            ON c.$CONTACT_ID = t.$POSTTAG_CONTACT_ID 
-            WHERE t.$POSTTAG_ID = ?
+            SELECT * FROM $CONTACT_TABLE_NAME WHERE $CONTACT_ID = ?
         """
         val cursor = db.rawQuery(selectQuery, arrayOf(tagId.toString()))
 

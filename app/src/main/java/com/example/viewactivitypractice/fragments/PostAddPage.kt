@@ -54,8 +54,9 @@ class PostAddPage : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         myDB = (activity as MainActivity).mydb
+        val tagIdSet : MutableSet<Int> = mutableSetOf()
         val view =  inflater.inflate(R.layout.post_add_page, container, false)
-        var tagIdList: ArrayList<Int> = arrayListOf<Int>()
+//        var tagIdList: ArrayList<Int> = arrayListOf<Int>()
         val uploadBtn = view.findViewById<Button>(R.id.post_upload_btn)
         val cancelBtn = view.findViewById<Button>(R.id.post_cancel_btn)
         // start camera or open gallery when user clicks image
@@ -86,9 +87,9 @@ class PostAddPage : Fragment() {
             if (item is ContactData) {
                 Log.d("PostTag", "clicked ${item.name}")
                 tagListStrList.add(item.name)
+                tagIdSet.add(item.id)
                 tagText += (item.name + " ")
                 tagList.text = tagText
-                tagIdList += item.id
             }
             tagAutoComplete.text = null
 
@@ -102,7 +103,7 @@ class PostAddPage : Fragment() {
                 val imgPath = bitImg?.let{bitimg -> saveBitmapToInternalStorage(requireContext(),bitimg)}
                 imgId = imgPath?.let { it1 -> myDB.insertImg(it1).toInt() }
                 Log.d("PostAddImg", "id $imgId added to $imgPath")
-                myDB.insertPost(PostData(-1, content, "", tagIdList, imgId))
+                myDB.insertPost(PostData(-1, content, "",/* tagIdList,*/ imgId), tagIdSet)
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
             }
         }
