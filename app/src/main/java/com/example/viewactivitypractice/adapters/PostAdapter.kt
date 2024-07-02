@@ -46,71 +46,73 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
             holder.img.visibility = View.GONE
         }
 
-        //val tagNameArray: ArrayList<String> = myDB.getContactNameArrayList(currentItem.tagIdList)
-        val tagIdArray: ArrayList<Int> = currentItem.tagIdList
-
+        val contactIdSet : Set<Int> =  myDB.getAllContactIdByPostId(currentItem.id)
+        Log.d("method check", "${myDB.getAllContactIdByPostId(currentItem.id)}")
+        Log.d("postId check", "$currentItem.id: ${currentItem.id}")
+        Log.d("contactIdSet Check", "$contactIdSet")
         val spannable = SpannableStringBuilder()
 
-        for (tagId in tagIdArray) {
+        for (contactId in contactIdSet) {
 
-            Log.d("loop", "click tag event${tagId}")
+            Log.d("loop", "click contact event id:${contactId}")
             val start = spannable.length
-            val tagName = myDB.getContactByTagId(tagId)?.name
-            spannable.append(tagName)
-            Log.d("spannable", "id: $tagId name: $tagName")
+            val contact = myDB.getContactByContactId(contactId)
+            val contactName = contact?.name
 
-            // Apply styles
-            spannable.setSpan(
-                StyleSpan(Typeface.ITALIC),
-                start,
-                spannable.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            spannable.setSpan(
-                UnderlineSpan(),
-                start,
-                spannable.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            // Apply ClickableSpan
-            spannable.setSpan(
-                object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        val context = widget.context
-                        if (context is FragmentActivity) {
-                            val contact = myDB.getContactByTagId(tagId)
-                            if (contact != null) {
-                                val contactDetailFragment = ContactDetailPage().apply {
-                                    arguments = Bundle().apply {
-                                        putInt("CONTACT_ID", contact.id)
-                                        putString("EXTRA_CONTACT_NAME", contact.name)
-                                        putString("EXTRA_CONTACT_PHONE", contact.phonenumber)
+            if (contactName != null) {
+                spannable.append("@$contactName")
+                Log.d("spannable", "id: $contactId name: $contactName")
+
+                // Apply styles
+                spannable.setSpan(
+                    StyleSpan(Typeface.ITALIC),
+                    start,
+                    spannable.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannable.setSpan(
+                    UnderlineSpan(),
+                    start,
+                    spannable.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                // Apply ClickableSpan
+                spannable.setSpan(
+                    object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            val context = widget.context
+                            if (context is FragmentActivity) {
+                                    val contactDetailFragment = ContactDetailPage().apply {
+                                        arguments = Bundle().apply {
+                                            putInt("CONTACT_ID", contact.id)
+                                            putString("EXTRA_CONTACT_NAME", contact.name)
+                                            putString("EXTRA_CONTACT_PHONE", contact.phonenumber)
+                                        }
                                     }
-                                }
-                                context.supportFragmentManager.beginTransaction()
-                                    .replace(R.id.blank_container, contactDetailFragment)
-                                    .addToBackStack(null)
-                                    .commit()
-                            } else {
-                                Toast.makeText(context, "Contact not found", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-                },
-                start,
-                spannable.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            Log.d("checkClickStart", "start: $start")
+                                    context.supportFragmentManager.beginTransaction()
+                                        .replace(R.id.blank_container, contactDetailFragment)
+                                        .addToBackStack(null)
+                                        .commit()
+                            } // fragment 검사
+                        } // onClick
+                    },
+                    start,
+                    spannable.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                ) // setSpan
+                Log.d("checkClickStart", "start: $start")
 
-            spannable.append(", ")
-        }
+                spannable.append(", ")
+            } // 널검사
+        } // loop end
 
         if (spannable.isNotEmpty()) {
             spannable.delete(spannable.length - 2, spannable.length)
         }
 
+        Log.d("spannable check", "current spannable: $spannable")
         holder.taggedName.text = spannable
+        Log.d("spannable viewing check", "current spannable: $spannable")
         holder.taggedName.movementMethod = LinkMovementMethod.getInstance()
     }
 
