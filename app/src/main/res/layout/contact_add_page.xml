@@ -5,54 +5,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/name_ET"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:inputType="text"
-        android:text=""
-        android:hint="이름을 입력하세요"
-        app:layout_constraintBottom_toTopOf="@+id/phoneNum_ET"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <EditText
-        android:id="@+id/phoneNum_ET"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="141dp"
-        android:ems="12"
-        android:inputType="number"
-        android:text=""
-        android:hint="전화번호를 입력하세요"
-        android:maxLength="11"
-        app:layout_constraintBottom_toTopOf="@+id/confirm_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_ET" />
+        <EditText
+            android:id="@+id/name_ET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:hint="이름을 입력하세요"
+            android:inputType="text"
+            android:text="" />
 
-    <Button
-        android:id="@+id/confirm_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Confirm"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cancel_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNum_ET" />
+        <EditText
+            android:id="@+id/phoneNum_ET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:ems="12"
+            android:hint="전화번호를 입력하세요"
+            android:inputType="number"
+            android:maxLength="11"
+            android:text="" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/cancel_btn"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/confirm_btn"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNum_ET"
-        app:layout_constraintVertical_bias="0.692" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:gravity="center" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/confirm_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confiem"
+            android:gravity="center" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
