@@ -36,13 +36,6 @@ class PostTab : Fragment() {
         postAddBtn.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostAddPage()).commit()
         }
-        val searchBtn = view.findViewById<Button>(R.id.post_search_btn)
-        /*searchBtn.setOnClickListener{
-            val searchText = view.findViewById<EditText>(R.id.post_search_ET).text.toString()
-            postDataList = myDB.getPostIncludes(searchText)
-            setRecyclerView(view)
-        }
-         */
         return view
     }
 
@@ -74,10 +67,6 @@ class PostTab : Fragment() {
     private fun dataInitialize() {
         val postDb = (activity as MainActivity).mydb
         postDataList = postDb.getAllPost()
-    }
-
-    fun extractTagsFromText(text: String): List<String> {
-        return text.split(" ").filter { it.startsWith("@") }
     }
 
 }

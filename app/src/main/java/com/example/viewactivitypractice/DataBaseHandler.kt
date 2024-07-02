@@ -144,6 +144,22 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return contactNameList.joinToString(separator = ", ") { "@$it" }
     }
+    fun getContactNameArrayList(contactIdList: ArrayList<Int>): ArrayList<String>{
+        var contactNameList = arrayListOf<String>()
+        val db = readableDatabase
+        val query = ("SELECT * FROM $CONTACT_TABLE_NAME WHERE $CONTACT_ID = ?")
+        for (contactId in contactIdList){
+            val cursor = db.rawQuery(query, arrayOf(contactId.toString()))
+            if (cursor.moveToFirst()) {
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
+                contactNameList.add(name)
+            }
+            cursor.close()
+        }
+        db.close()
+        return contactNameList
+    }
+
     fun getAllContact(): ArrayList<ContactData>{
         val contactList = ArrayList<ContactData>()
         val db = readableDatabase
@@ -374,6 +390,33 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         db.close()
         return tagList
+    }
+
+
+    fun getContactByTagId(tagId: Int): ContactData? {
+        val db = this.readableDatabase
+        val selectQuery = """
+            SELECT * FROM $CONTACT_TABLE_NAME c 
+            JOIN $POST_TAGS_TABLE_NAME t 
+            ON c.$CONTACT_ID = t.$POSTTAG_CONTACT_ID 
+            WHERE t.$POSTTAG_ID = ?
+        """
+        val cursor = db.rawQuery(selectQuery, arrayOf(tagId.toString()))
+
+        cursor?.let {
+            if (it.moveToFirst()) {
+                val contact = ContactData(
+                    it.getInt(it.getColumnIndexOrThrow(CONTACT_ID)),
+                    it.getString(it.getColumnIndexOrThrow(CONTACT_NAME)),
+                    it.getString(it.getColumnIndexOrThrow(CONTACT_PHONENUM))
+                )
+                cursor.close()
+                return contact
+            }
+        }
+
+        cursor?.close()
+        return null
     }
 
     //D

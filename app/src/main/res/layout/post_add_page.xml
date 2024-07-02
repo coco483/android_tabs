@@ -90,12 +90,10 @@
         android:id="@+id/tag_list_TV"
         android:layout_width="359dp"
         android:layout_height="42dp"
-        android:text="taglist"
         android:background="#00FF00"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="569dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:hint="tag"
+        app:layout_constraintBottom_toTopOf="@+id/tag_AutoTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_ET"
-        app:layout_constraintBottom_toTopOf="@+id/tag_AutoTV" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_ET" />
 </androidx.constraintlayout.widget.ConstraintLayout>
