@@ -15,6 +15,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.viewactivitypractice.DataBaseHandler
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
@@ -51,7 +52,7 @@ class GalleryTab : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         imgDataInitialize()
         recyclerView = view.findViewById(R.id.img_recyclerview)
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = ImageAdapter(imgDataList)
     }
