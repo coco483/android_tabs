@@ -5,63 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/name_ET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="150dp"
                 android:layout_marginBottom="50dp"
                 android:ems="12"
                 android:inputType="text"
-                android:text="" />
+                android:text=""
+                android:gravity="center"/>
 
             <EditText
                 android:id="@+id/phoneNum_ET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="50dp"
                 android:ems="12"
                 android:inputType="number"
                 android:maxLength="11"
-                android:text="" />
+                android:text=""
+                android:gravity="center"/>
 
-            <Button
-                android:id="@+id/edit_btn"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="148dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="175dp"
-                android:layout_marginBottom="200dp"
-                android:text="Edit" />
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp">
 
-            <Button
-                android:id="@+id/delete_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:text="Delete" />
+                <Button
+                    android:id="@+id/edit_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Edit" />
 
+                <Button
+                    android:id="@+id/delete_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="Delete" />
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/contact_tagged_post_RV"
                 android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/contact_items" >
+                tools:listitem="@layout/post_items" >
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
-    </ScrollView>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
