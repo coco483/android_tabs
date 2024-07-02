@@ -20,8 +20,8 @@
 
     <EditText
         android:id="@+id/content_ET"
-        android:layout_width="350dp"
-        android:layout_height="230dp"
+        android:layout_width="351dp"
+        android:layout_height="121dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="436dp"
@@ -34,19 +34,17 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/tag_ET"
-        android:layout_width="350dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_width="249dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="60dp"
         android:ems="10"
         android:inputType="text"
-        android:text="tag"
+        android:completionHint="이름을 입력하세요"
+        android:completionThreshold="1"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content_ET" />
 
@@ -82,4 +80,20 @@
         app:layout_constraintEnd_toStartOf="@+id/post_upload_btn"
         app:layout_constraintStart_toEndOf="@+id/post_cancel_btn"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/tag_add_btn"
+        android:layout_width="89dp"
+        android:layout_height="46dp"
+        android:text="Button"
+        tools:layout_editor_absoluteX="287dp"
+        tools:layout_editor_absoluteY="619dp" />
+
+    <TextView
+        android:id="@+id/tag_list_TV"
+        android:layout_width="359dp"
+        android:layout_height="42dp"
+        android:text="taglist"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="569dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
