@@ -103,7 +103,7 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
             )
             Log.d("checkClickStart", "start: $start")
 
-            spannable.append("@@")
+            spannable.append(", ")
         }
 
         if (spannable.isNotEmpty()) {
