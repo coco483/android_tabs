@@ -39,16 +39,16 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
         val bitImg: Bitmap? = myDB.getImgById(currentItem.imageId)
         bitImg?.let { holder.img.setImageBitmap(it) }
 
-        val tagNameArray: ArrayList<String> = myDB.getContactNameArrayList(currentItem.tagIdList)
+        //val tagNameArray: ArrayList<String> = myDB.getContactNameArrayList(currentItem.tagIdList)
         val tagIdArray: ArrayList<Int> = currentItem.tagIdList
 
         val spannable = SpannableStringBuilder()
 
-        for ((index, tagName) in tagNameArray.withIndex()) {
+        for (tagId in tagIdArray) {
 
-            Log.d("loop", "click tag event${index} ${tagName}")
-            val tagId = tagIdArray[index]
+            Log.d("loop", "click tag event${tagId}")
             val start = spannable.length
+            val tagName = myDB.getContactByTagId(tagId)?.name
             spannable.append(tagName)
             Log.d("spannable", "start: $start spannable: $spannable")
 
@@ -96,7 +96,7 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
             )
             Log.d("checkClickStart", "start: $start")
 
-            spannable.append(", ")
+            spannable.append("@@")
         }
 
         if (spannable.isNotEmpty()) {
