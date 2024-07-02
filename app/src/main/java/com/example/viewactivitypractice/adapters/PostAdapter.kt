@@ -1,6 +1,7 @@
 package com.example.viewactivitypractice.adapters
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -37,7 +38,13 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
         holder.content.text = currentItem.content
         holder.date.text = currentItem.date
         val bitImg: Bitmap? = myDB.getImgById(currentItem.imageId)
-        bitImg?.let { holder.img.setImageBitmap(it) }
+        // bitImg?.let { holder.img.setImageBitmap(it) }
+        if (bitImg != null) {
+            holder.img.setImageBitmap(bitImg)
+            holder.img.visibility = View.VISIBLE
+        } else {
+            holder.img.visibility = View.GONE
+        }
 
         //val tagNameArray: ArrayList<String> = myDB.getContactNameArrayList(currentItem.tagIdList)
         val tagIdArray: ArrayList<Int> = currentItem.tagIdList
@@ -50,7 +57,7 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
             val start = spannable.length
             val tagName = myDB.getContactByTagId(tagId)?.name
             spannable.append(tagName)
-            Log.d("spannable", "start: $start spannable: $spannable")
+            Log.d("spannable", "id: $tagId name: $tagName")
 
             // Apply styles
             spannable.setSpan(
