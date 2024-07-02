@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,11 +35,11 @@ class ContactTab : Fragment() {
         myDB = (activity as MainActivity).mydb
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.contact_tab_fragment, container, false)
-        val add_btn = view.findViewById<Button>(R.id.add_contact_button)
+        val add_btn = view.findViewById<ImageButton>(R.id.add_contact_button)
         add_btn.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, ContactAddPage()).commit()
         }
-        val searchBtn = view.findViewById<Button>(R.id.contact_search_btn)
+        val searchBtn = view.findViewById<ImageButton>(R.id.contact_search_btn)
         searchBtn.setOnClickListener{
             val searchText = view.findViewById<EditText>(R.id.contact_search_ET).text.toString()
             contactDataList = myDB.getContactIncludes(searchText)

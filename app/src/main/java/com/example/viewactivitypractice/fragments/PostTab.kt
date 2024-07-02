@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +33,7 @@ class PostTab : Fragment() {
         myDB = (activity as MainActivity).mydb
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.post_tab_fragment, container, false)
-        val postAddBtn = view.findViewById<Button>(R.id.post_tab_upload_btn)
+        val postAddBtn = view.findViewById<ImageButton>(R.id.post_tab_upload_btn)
         postAddBtn.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostAddPage()).commit()
         }

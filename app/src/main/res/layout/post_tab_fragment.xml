@@ -22,22 +22,27 @@
 
             <EditText
                 android:id="@+id/post_search_ET"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:minHeight="50dp"
                 android:layout_marginStart="10dp"
+                android:layout_weight="7"
                 android:hint=" search for post"
                 android:text=""
-                android:textSize="28sp" />
+                android:textSize="20sp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/post_search_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:text="search" />
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="Search"
+                android:scaleType="fitXY"
+                android:src="@drawable/baseline_search_24"
+                app:tint="@color/dark_purple" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -47,14 +52,18 @@
             tools:listitem="@layout/post_items" />
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/post_tab_upload_btn"
-        android:text="Add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@null"
+        android:contentDescription="Upload"
+        android:scaleType="fitXY"
+        android:src="@drawable/baseline_post_add_24"
+        app:tint="@color/dark_purple" />
 
 </RelativeLayout>
