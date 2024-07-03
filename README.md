@@ -25,7 +25,7 @@ DiaryGram은 당신의 소중한 추억들을 함께했던 사람들을 기록�
 연락처를 목록으로 볼 수 있습니다.
 연락처를 클릭하면 삭제 버튼과 상세 정보 버튼이 보이게 됩니다.
 
-#### 연락처 추가
+### 연락처 추가
 
 ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/eb832bb2-1289-4f1a-92d3-787ed57e0ac9/Untitled.png)
 
@@ -33,13 +33,13 @@ DiaryGram은 당신의 소중한 추억들을 함께했던 사람들을 기록�
 이미지는 카메라로 사진을 찍거나 핸드폰 갤러리에서 가져올 수 있습니다.
 프로필 이미지가 없는 경우 기본 아이콘으로 대체됩니다.
 
-#### 검색 기능
+### 검색 기능
 
 ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/50af4deb-8dc2-46df-af44-46063718e5d0/Untitled.png)
 
 이름과 전화번호를 기준으로 검색할 수 있도록 검색 기능을 구현하였습니다.
 
-#### 연락처 상세페이지
+### 연락처 상세페이지
 
 ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/3d5462fe-7778-4a7f-bf43-2e27fe501551/Untitled.png)
 
@@ -62,11 +62,11 @@ DiaryGram은 당신의 소중한 추억들을 함께했던 사람들을 기록�
 포스트를 클릭하면 삭제와 상세정보 버튼이 보이게 됩니다.
 이미지, 내용, 태그한 연락처들과 포스트를 등록한 시간을 볼 수 있습니다.
 
-#### 포스트 등록
+### 포스트 등록
 
 ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/03860f85-3440-404b-b160-385e3554ba91/Untitled.png)
 
-#### 태그 기능
+### 태그 기능
 
 ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/06736950-c5c0-4c9c-aef7-81067cd28587/Untitled.png)
 
@@ -74,13 +74,13 @@ DiaryGram은 당신의 소중한 추억들을 함께했던 사람들을 기록�
 AutoCompleteTextView를 통해 이름을 입력하면 연락처를 검색하고, 클릭 시 자동 완성되어 태그 목록에 올라가도록 구현하였습니다.
 포스트 목록 혹은 상세페이지에서 해당 태그들을 클릭하면 연락처 상세정보로 넘어갑니다.
 
-#### 검색
+### 검색
 
 ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/14c824c0-f735-4fb3-9442-d2ab881e7f26/Untitled.png)
 
 내용을 기준으로 검색할 수 있도록 검색 기능을 구현했습니다.
 
-#### 포스트 상세페이지
+### 포스트 상세페이지
 
 (img)
 
