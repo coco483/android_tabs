@@ -1,13 +1,19 @@
 # DiaryGram
 
 나만의 작고 소중한 SNS일기장 DiaryGram!
+
 사진과 함께 소중한 추억을 보낸 사람들을 태그해보세요!
 
 ## OutLine
 
+DiaryGram은 당신의 소중한 추억들을 함께했던 사람들을 기록하고, 그 추억들이 담긴 사진을 올릴 수 있는 나만의 일기장 앱입니다.
+
+연락처탭, 갤러리탭, 포스트탭 총 세 가지 탭으로 구성되어있습니다.
+
 ## Team
 
 [송종찬(성균관대학교)](https://github.com/jongchan159)
+
 [김문정(카이스트)](https://github.com/coco483)
 
 ## Detail
