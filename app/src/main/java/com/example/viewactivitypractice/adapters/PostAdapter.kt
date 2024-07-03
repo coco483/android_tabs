@@ -8,6 +8,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
@@ -66,6 +67,12 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
                 // Apply styles
                 spannable.setSpan(
                     StyleSpan(Typeface.ITALIC),
+                    start,
+                    spannable.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannable.setSpan(
+                    ForegroundColorSpan(Color.BLUE),
                     start,
                     spannable.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
