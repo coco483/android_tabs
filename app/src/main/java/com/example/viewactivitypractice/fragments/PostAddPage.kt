@@ -9,6 +9,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -73,6 +75,7 @@ class PostAddPage : Fragment() {
         val tagList = view.findViewById<TextView>(R.id.tag_list_TV)
         var tagText = tagList.text.toString()
         tagList.setText("")
+
         val tagListStrList : ArrayList<String> = arrayListOf()
         val tagAutoComplete = view.findViewById<AutoCompleteTextView>(R.id.tag_AutoTV)
         setContactList()
