@@ -394,7 +394,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_IMG_ID))
 
                 val post = PostData(postId, content, date,/*tagList, */imageId)
-                postList.add(post)
+                postList.add(0, post)
             } while (cursor.moveToNext())
         }
 
