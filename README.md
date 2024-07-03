@@ -1,6 +1,5 @@
 # DiaryGram
 
-![아이콘](https://github.com/coco483/android_tabs/blob/readme/image/miniappicon.jpg)
 나만의 작고 소중한 일기장 DiaryGram을 통해 소중한 추억을 보낸 사람들을 태그해보세요!
 
 ## OutLine
@@ -16,8 +15,6 @@ DiaryGram은 당신의 소중한 추억들을 함께했던 사람들을 기록�
 [김문정(카이스트)](https://github.com/coco483)
 
 ## Details
-
-### Intro
 
 ### Tab 1 : 연락처
 
