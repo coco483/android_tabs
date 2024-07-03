@@ -29,6 +29,7 @@ DiaryGram은 당신의 소중한 추억들을 함께했던 사람들을 기록�
 ### 연락처 추가
 
 ![연락처추가](https://github.com/coco483/android_tabs/blob/readme/image/2.%EC%97%B0%EB%9D%BD%EC%B2%98%EC%B6%94%EA%B0%80.png)
+
 프로필 이미지, 이름, 전화번호를 입력하여 연락처를 추가합니다.
 
 이미지는 카메라로 사진을 찍거나 핸드폰 갤러리에서 가져올 수 있습니다.
