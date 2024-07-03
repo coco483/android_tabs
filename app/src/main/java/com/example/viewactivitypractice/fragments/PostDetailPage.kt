@@ -76,7 +76,7 @@ class PostDetailPage : Fragment() {
 
         imgView = view.findViewById<ImageView>(R.id.post_imageView)
         val bitImg = myDB.getImgById(postImgId)
-        imgView.setImageBitmap(bitImg)
+        bitImg?.let{ img -> imgView.setImageBitmap(img)}
 
         // autocomplete tag search
         val contactIdSet : Set<Int> =  myDB.getAllContactIdByPostId(postId)

@@ -132,6 +132,22 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         return contactList
     }
+    fun getContactByImageId(imageId: Int): ContactData? {
+        val db = readableDatabase
+        val query = "SELECT * FROM $CONTACT_TABLE_NAME WHERE $CONTACT_IMG_ID = ?"
+        val cursor = db.rawQuery(query, arrayOf(imageId.toString()))
+        var contact: ContactData? = null
+
+        if (cursor.moveToFirst()) {
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow(CONTACT_ID))
+            val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
+            val phonenum = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_PHONENUM))
+            contact = ContactData(id, name, phonenum, imageId)
+        }
+        cursor.close()
+        db.close()
+        return contact
+    }
     fun getContactNameList(contactIdList: ArrayList<Int>): String{
         var contactNameList = arrayListOf<String>()
         val db = readableDatabase

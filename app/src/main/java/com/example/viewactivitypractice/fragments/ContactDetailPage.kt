@@ -69,7 +69,7 @@ class ContactDetailPage : Fragment() {
         val deleteBtn = view.findViewById<Button>(R.id.delete_btn)
         imgView = view.findViewById<ImageView>(R.id.contact_imageView)
         bitImg = myDB.getImgById(contactImageId)
-        imgView.setImageBitmap(bitImg)
+        bitImg?.let{ img -> imgView.setImageBitmap(img)}
 
         imgView.setOnClickListener {
             val options = arrayOf("Take Photo", "Choose from Gallery")

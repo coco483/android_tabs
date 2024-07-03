@@ -23,6 +23,7 @@ import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.adapters.ImageAdapter
 import com.example.viewactivitypractice.adapters.PostAdapter
+import com.example.viewactivitypractice.datas.ContactData
 import com.example.viewactivitypractice.datas.ImageData
 import com.example.viewactivitypractice.datas.PostData
 import com.example.viewactivitypractice.uriToBitmap
@@ -61,10 +62,13 @@ class GalleryTab : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = ImageAdapter(imgDataList) { imageData ->
             val post = myDB.getPostByImageId(imageData.id)
+            val contact = myDB.getContactByImageId(imageData.id)
             if (post != null) {
                 openPostDetailFragment(post)
+            } else if (contact != null){
+                openContactDetailFragment(contact)
             } else {
-                Toast.makeText(requireContext(), "관련 포스트를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "관련 포스트 또는 연락처를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -86,6 +90,21 @@ class GalleryTab : Fragment() {
         parentFragmentManager.beginTransaction()
             .replace(R.id.blank_container, postDetailFragment)
             .addToBackStack(null)
+            .commit()
+    }
+    private fun openContactDetailFragment(contact: ContactData){
+        // 클릭된 아이템의 연락처 정보를 ContactDetailPage 프래그먼트에 전달
+        val detailFragment = ContactDetailPage().apply {
+            arguments = Bundle().apply {
+                putInt("CONTACT_ID", contact.id)  // 가정: ContactData에 id 필드가 있다고 가정
+                putString("EXTRA_CONTACT_NAME", contact.name)
+                putString("EXTRA_CONTACT_PHONE",contact.phonenumber)
+                contact.imageId?.let { putInt("CONTACT_IMG_ID", it) }
+            }
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.blank_container, detailFragment)
+            .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
             .commit()
     }
 }
