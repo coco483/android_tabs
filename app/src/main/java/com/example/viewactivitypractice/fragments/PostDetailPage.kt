@@ -32,10 +32,6 @@ import com.example.viewactivitypractice.datas.PostData
 import com.example.viewactivitypractice.saveBitmapToInternalStorage
 import com.example.viewactivitypractice.uriToBitmap
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -49,6 +45,7 @@ class PostDetailPage : Fragment() {
     private lateinit var postContent: String
     private var postImgId : Int? = null
     private var tagListText: String? = ""
+    private var isImageChanged : Boolean = false
 
     private var bitImg : Bitmap? = null
     private var imgId: Int? = null
@@ -122,13 +119,22 @@ class PostDetailPage : Fragment() {
             if (newContent == "") {
                 Toast.makeText(requireContext(), "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
             } else {
-                val imgPath = bitImg?.let{bitimg -> saveBitmapToInternalStorage(requireContext(),bitimg) }
-                imgId = imgPath?.let { it1 -> myDB.insertImg(it1).toInt() }
-                myDB.updatePost(PostData(postId, newContent, ""), tagIdSet) // 연락처 업데이트
+                if(isImageChanged) {
+                    val imgPath = bitImg?.let { bitimg ->
+                        saveBitmapToInternalStorage(
+                            requireContext(),
+                            bitimg
+                        )
+                    }
+                    postImgId?.let { it1 -> myDB.deleteImgById(it1) }
+                    imgId = imgPath?.let { it1 -> myDB.insertImg(it1).toInt() }
+                }
+                myDB.updatePost(PostData(postId, newContent, "", imgId), tagIdSet) // 연락처 업데이트
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab())
                     .commit() // 변경 사항 반영
             }
         }
+
         val deleteBtn = view.findViewById<Button>(R.id.post_delete_btn)
         deleteBtn.setOnClickListener {
             myDB.deletePostById(postId)
@@ -192,9 +198,12 @@ class PostDetailPage : Fragment() {
             pickImageFromGallery.launch(pickUpImgFromGallery)
         }
     }
+
+
     private val pickImageFromGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             val imageUri: Uri? = result.data?.data
+            isImageChanged = true
             Log.d("IMG_PICK", "Successfully picked an img, $imageUri")
             bitImg = uriToBitmap(imageUri, requireActivity())
             bitImg?.let { imgView.setImageBitmap(it) }
@@ -204,6 +213,7 @@ class PostDetailPage : Fragment() {
     private val takePictureByCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             val imageBitmap = result.data?.extras?.get("data") as Bitmap
+            isImageChanged = true
             Log.d("CAMERA", "Successfully took a picture, $imageBitmap")
             bitImg = imageBitmap
             bitImg?.let { imgView.setImageBitmap(it) }
