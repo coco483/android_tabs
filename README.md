@@ -1,6 +1,5 @@
 # DiaryGram
 
-![appicon](https://github.com/coco483/android_tabs/blob/readme/image/appicon.jpg)
 나만의 작고 소중한 일기장 DiaryGram을 통해 소중한 추억을 보낸 사람들을 태그해보세요!
 
 ## OutLine
