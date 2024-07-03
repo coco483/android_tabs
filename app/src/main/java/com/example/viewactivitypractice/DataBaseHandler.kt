@@ -492,7 +492,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     //D
     private fun deleteTagByPostId(postId: Int): Int {
         val db = this.writableDatabase
-        val result = db.delete(POST_TAGS_TABLE_NAME, "$POSTTAG_ID = ?", arrayOf(postId.toString()))
+        val result = db.delete(POST_TAGS_TABLE_NAME, "$POSTTAG_POST_ID = ?", arrayOf(postId.toString()))
         db.close()
         return result
     }
