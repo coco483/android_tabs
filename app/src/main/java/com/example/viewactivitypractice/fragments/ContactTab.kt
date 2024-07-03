@@ -1,12 +1,17 @@
 package com.example.viewactivitypractice.fragments
 
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,25 +56,33 @@ class ContactTab : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         contactDataList = myDB.getAllContact()
+
         setRecyclerView(view, contactDataList)
     }
     fun setRecyclerView(view: View, contactDatas: ArrayList<ContactData>){
         recyclerView = view.findViewById(R.id.numRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = ContactAdapter(contactDatas) { contact ->
-            // 클릭된 아이템의 연락처 정보를 ContactDetailPage 프래그먼트에 전달
-            val detailFragment = ContactDetailPage().apply {
-                arguments = Bundle().apply {
-                    putInt("CONTACT_ID", contact.id)  // 가정: ContactData에 id 필드가 있다고 가정
-                    putString("EXTRA_CONTACT_NAME", contact.name)
-                    putString("EXTRA_CONTACT_PHONE",contact.phonenumber)
-                }
+        recyclerView.adapter = ContactAdapter(contactDatas, gotoContactDetail, deleteContact)
+    }
+    val gotoContactDetail: (ContactData) -> Unit = {contact ->
+        // 클릭된 아이템의 연락처 정보를 ContactDetailPage 프래그먼트에 전달
+        val detailFragment = ContactDetailPage().apply {
+            arguments = Bundle().apply {
+                putInt("CONTACT_ID", contact.id)  // 가정: ContactData에 id 필드가 있다고 가정
+                putString("EXTRA_CONTACT_NAME", contact.name)
+                putString("EXTRA_CONTACT_PHONE",contact.phonenumber)
             }
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.blank_container, detailFragment)
-                .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
-                .commit()
         }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.blank_container, detailFragment)
+            .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
+            .commit()
+    }
+    val deleteContact: (Int) -> Unit = { contactId ->
+        myDB.deleteContactById(contactId) // ID를 사용하여 삭제
+        Toast.makeText(requireContext(), "Contact deleted successfully", Toast.LENGTH_SHORT).show()
+        parentFragmentManager.beginTransaction().replace(R.id.blank_container, ContactTab())
+            .commit()
     }
 }
