@@ -192,15 +192,15 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     // 연락처 편집
-    fun updateContact(id: Int, name: String, phoneNumber: String) {
+    fun updateContact(contact: ContactData) {
         val db = this.writableDatabase
-        Log.d("updateDB", "id: $id, name: $name, num: $phoneNumber")
         val contentValues = ContentValues()
         // contentValues.put(COL_ID, id)
-        contentValues.put(CONTACT_NAME, name)
-        contentValues.put(CONTACT_PHONENUM, phoneNumber)
+        contentValues.put(CONTACT_NAME, contact.name)
+        contentValues.put(CONTACT_PHONENUM, contact.phonenumber)
+        contentValues.put(CONTACT_IMG_ID, contact.imageId)
 
-        db.update(CONTACT_TABLE_NAME, contentValues, "id = ?", arrayOf(id.toString()))
+        db.update(CONTACT_TABLE_NAME, contentValues, "id = ?", arrayOf(contact.id.toString()))
         db.close()
     }
 

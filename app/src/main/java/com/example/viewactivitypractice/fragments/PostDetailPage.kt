@@ -120,11 +120,7 @@ class PostDetailPage : Fragment() {
                 Toast.makeText(requireContext(), "내용을 입력해 주세요", Toast.LENGTH_SHORT).show()
             } else {
                 if(isImageChanged) {
-                    val imgPath = bitImg?.let { bitimg ->
-                        saveBitmapToInternalStorage(
-                            requireContext(),
-                            bitimg
-                        )
+                    val imgPath = bitImg?.let { bitimg -> saveBitmapToInternalStorage(requireContext(), bitimg)
                     }
                     postImgId?.let { it1 -> myDB.deleteImgById(it1) }
                     imgId = imgPath?.let { it1 -> myDB.insertImg(it1).toInt() }
