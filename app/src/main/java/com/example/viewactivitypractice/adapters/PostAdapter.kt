@@ -110,6 +110,7 @@ class PostAdapter(private val myDB: DataBaseHandler,
                                             putInt("CONTACT_ID", contact.id)
                                             putString("EXTRA_CONTACT_NAME", contact.name)
                                             putString("EXTRA_CONTACT_PHONE", contact.phonenumber)
+                                            contact.imageId?.let { putInt("CONTACT_IMG_ID", it) }
                                         }
                                     }
                                 (context as MainActivity).updateBottomNavigationView(R.id.tab1)

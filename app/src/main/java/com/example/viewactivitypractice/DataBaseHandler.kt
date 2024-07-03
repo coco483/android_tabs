@@ -461,7 +461,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val contact = ContactData(
                     it.getInt(it.getColumnIndexOrThrow(CONTACT_ID)),
                     it.getString(it.getColumnIndexOrThrow(CONTACT_NAME)),
-                    it.getString(it.getColumnIndexOrThrow(CONTACT_PHONENUM))
+                    it.getString(it.getColumnIndexOrThrow(CONTACT_PHONENUM)),
+                    it.getInt(it.getColumnIndexOrThrow(CONTACT_IMG_ID))
                 )
                 cursor.close()
                 return contact
