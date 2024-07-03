@@ -8,6 +8,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
@@ -23,6 +24,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.viewactivitypractice.DataBaseHandler
+import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.datas.ContactData
 import com.example.viewactivitypractice.datas.PostData
@@ -86,6 +88,12 @@ class PostAdapter(private val myDB: DataBaseHandler,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 spannable.setSpan(
+                    ForegroundColorSpan(Color.BLUE),
+                    start,
+                    spannable.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannable.setSpan(
                     UnderlineSpan(),
                     start,
                     spannable.length,
@@ -104,11 +112,15 @@ class PostAdapter(private val myDB: DataBaseHandler,
                                             putString("EXTRA_CONTACT_PHONE", contact.phonenumber)
                                         }
                                     }
-                                    context.supportFragmentManager.beginTransaction()
+                                (context as MainActivity).updateBottomNavigationView(R.id.tab1)
+                                context.supportFragmentManager.beginTransaction()
                                         .replace(R.id.blank_container, contactDetailFragment)
                                         .addToBackStack(null)
                                         .commit()
-                            } // fragment 검사
+
+
+
+                            } // if
                         } // onClick
                     },
                     start,

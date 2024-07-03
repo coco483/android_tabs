@@ -23,19 +23,32 @@
                 android:id="@+id/post_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="0dp"
+                android:adjustViewBounds="true"
                 app:layout_constraintBottom_toTopOf="@+id/content_ET"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:adjustViewBounds="true"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/tag_list_TV"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical"
+                android:textColor="#205C8B"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/tag_AutoTV"
+                app:layout_constraintTop_toBottomOf="@+id/content_ET"
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="569dp" />
 
             <EditText
                 android:id="@+id/content_ET"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_marginBottom="10dp"
                 android:ems="10"
                 android:hint="Content"
@@ -46,18 +59,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_imageView" />
-
-            <TextView
-                android:id="@+id/tag_list_TV"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:background="#EDEDED"
-                android:gravity="center_vertical"
-                android:hint="tag your friend!"
-                app:layout_constraintBottom_toTopOf="@+id/tag_AutoTV"
-                app:layout_constraintTop_toBottomOf="@+id/content_ET"
-                tools:layout_editor_absoluteX="28dp"
-                tools:layout_editor_absoluteY="569dp" />
 
             <AutoCompleteTextView
                 android:id="@+id/tag_AutoTV"
