@@ -14,6 +14,7 @@ import com.example.viewactivitypractice.DataBaseHandler
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.adapters.PostAdapter
+import com.example.viewactivitypractice.datas.ContactData
 import com.example.viewactivitypractice.datas.PostData
 
 /**
@@ -55,20 +56,26 @@ class PostTab : Fragment() {
         recyclerView = view.findViewById(R.id.postRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = PostAdapter(myDB, postDatas) { post ->
-            // 클릭된 아이템의 연락처 정보를 PostDetailPage 프래그먼트에 전달
-            val detailPage = PostDetailPage().apply {
-                arguments = Bundle().apply {
-                    putInt("POST_ID", post.id)  // 가정: PostData에 id 필드가 있다고 가정
-                    putString("POST_CONTENT", post.content)
-                    post.imageId?.let { putInt("POST_IMG_ID", it) }
-                }
+        recyclerView.adapter = PostAdapter(myDB, postDatas, gotoPostDetail, deletPost)
+    }
+    val gotoPostDetail: (PostData) -> Unit = { post ->
+        // 클릭된 아이템의 연락처 정보를 PostDetailPage 프래그먼트에 전달
+        val detailPage = PostDetailPage().apply {
+            arguments = Bundle().apply {
+                putInt("POST_ID", post.id)  // 가정: PostData에 id 필드가 있다고 가정
+                putString("POST_CONTENT", post.content)
+                post.imageId?.let { putInt("POST_IMG_ID", it) }
             }
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.blank_container, detailPage)
-                .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
-                .commit()
         }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.blank_container, detailPage)
+            .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
+            .commit()
+    }
+    val deletPost: (Int) -> Unit = { postId ->
+            myDB.deletePostById(postId)
+            parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab())
+                .commit()
     }
     private fun dataInitialize() {
         val postDb = (activity as MainActivity).mydb

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,13 +24,16 @@ class ContactDetailPage : Fragment() {
     private var contactId: Int = -1  // 인스턴스 변수로 ID 저장
     private lateinit var contactName: String
     private lateinit var contactPhoneNum: String
+    private var contactImageId: Int? = null
     private lateinit var myDB: DataBaseHandler
+    private lateinit var imgView : ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             contactId = it.getInt("CONTACT_ID")
             contactName = it.getString("EXTRA_CONTACT_NAME").toString()
             contactPhoneNum = it.getString("EXTRA_CONTACT_PHONE").toString()
+            contactImageId = it.getInt("CONTACT_IMG_ID")
             Log.d("ContactDetail", "id: $contactId")
         }
     }
@@ -46,7 +50,9 @@ class ContactDetailPage : Fragment() {
 
         val editBtn = view.findViewById<Button>(R.id.edit_btn)
         val deleteBtn = view.findViewById<Button>(R.id.delete_btn)
-
+        imgView = view.findViewById<ImageView>(R.id.contact_imageView)
+        val bitImg = myDB.getImgById(contactImageId)
+        imgView.setImageBitmap(bitImg)
         editBtn.setOnClickListener {
 
             val newName = view.findViewById<EditText>(R.id.name_ET).text.toString()
@@ -83,20 +89,21 @@ class ContactDetailPage : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.contact_tagged_post_RV)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = PostAdapter(myDB, postDatas) { post ->
-            // 클릭된 아이템의 연락처 정보를 PostDetailPage 프래그먼트에 전달
-            val detailPage = PostDetailPage().apply {
-                arguments = Bundle().apply {
-                    putInt("POST_ID", post.id)  // 가정: PostData에 id 필드가 있다고 가정
-                    putString("POST_CONTENT", post.content)
-                    post.imageId?.let { putInt("POST_IMG_ID", it) }
-                }
+        recyclerView.adapter = PostAdapter(myDB, postDatas, gotoPostDetail)
+    }
+    val gotoPostDetail: (PostData) -> Unit = { post ->
+        // 클릭된 아이템의 연락처 정보를 PostDetailPage 프래그먼트에 전달
+        val detailPage = PostDetailPage().apply {
+            arguments = Bundle().apply {
+                putInt("POST_ID", post.id)  // 가정: PostData에 id 필드가 있다고 가정
+                putString("POST_CONTENT", post.content)
+                post.imageId?.let { putInt("POST_IMG_ID", it) }
             }
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.blank_container, detailPage)
-                .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
-                .commit()
         }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.blank_container, detailPage)
+            .addToBackStack(null)  // Back stack을 사용하여 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 함
+            .commit()
     }
 
 

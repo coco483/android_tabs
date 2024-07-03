@@ -99,7 +99,7 @@ class PostAddPage : Fragment() {
                 val imgPath = bitImg?.let{bitimg -> saveBitmapToInternalStorage(requireContext(),bitimg)}
                 imgId = imgPath?.let { it1 -> myDB.insertImg(it1).toInt() }
                 Log.d("PostAddImg", "id $imgId added to $imgPath")
-                myDB.insertPost(PostData(-1, content, "",/* tagIdList,*/ imgId), tagIdSet)
+                myDB.insertPost(PostData(-1, content, "", imgId), tagIdSet)
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()
             }
         }
@@ -152,7 +152,6 @@ class PostAddPage : Fragment() {
             Log.d("IMG_PICK", "Successfully picked an img, $imageUri")
             bitImg = uriToBitmap(imageUri, requireActivity())
             bitImg?.let { imgView.setImageBitmap(it) }
-            Log.d("IMG_PICK", "bitImg: $bitImg")
         }
     }
     private val takePictureByCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -161,8 +160,6 @@ class PostAddPage : Fragment() {
             Log.d("CAMERA", "Successfully took a picture, $imageBitmap")
             bitImg = imageBitmap
             bitImg?.let { imgView.setImageBitmap(it) }
-
-            Log.d("CAMERA", "bitImg: $bitImg")
         }
     }
 

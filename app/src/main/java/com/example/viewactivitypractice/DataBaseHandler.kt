@@ -21,6 +21,7 @@ private const val CONTACT_TABLE_NAME = "Contacts"
 private const val CONTACT_NAME = "name"
 private const val CONTACT_ID = "id"
 private const val CONTACT_PHONENUM = "phonenumber"
+private const val CONTACT_IMG_ID = "image_id"
 
 // for Gallery
 private const val IMG_TABLE_NAME = "Images"
@@ -52,7 +53,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val createContactTableQuery = ("CREATE TABLE $CONTACT_TABLE_NAME (" +
                 "$CONTACT_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
                 "$CONTACT_NAME VARCHAR, " +
-                "$CONTACT_PHONENUM VARCHAR(11))")
+                "$CONTACT_PHONENUM VARCHAR(11), "+
+                "$CONTACT_IMG_ID INTEGER)")
         db!!.execSQL(createContactTableQuery)
     }
     // 이미지 테이블 생성
@@ -102,11 +104,12 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     // Contact
-    fun insertContact(name:String, phonenumber:String): Long {
-        Log.d("DBhandler", "insert contact $name, $phonenumber")
+    fun insertContact(contact: ContactData): Long {
+        Log.d("DBhandler", "insert contact ${contact.name}, ${contact.phonenumber}")
         val values = ContentValues().apply {
-            put(CONTACT_NAME, name)
-            put(CONTACT_PHONENUM, phonenumber)
+            put(CONTACT_NAME, contact.name)
+            put(CONTACT_PHONENUM, contact.phonenumber)
+            put(CONTACT_IMG_ID, contact.imageId)
         }
         val db = writableDatabase
         return db.insert(CONTACT_TABLE_NAME, null, values)
@@ -171,7 +174,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(CONTACT_ID))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
                 val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_PHONENUM))
-                val contact = ContactData(id, name, phonenumber)
+                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(CONTACT_IMG_ID))
+                val contact = ContactData(id, name, phonenumber, imageId)
                 contactList.add(contact)
                 Log.d("DBread", "read $name, $phonenumber")
             } while (cursor.moveToNext())

@@ -15,8 +15,8 @@ import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.datas.ContactData
 
 class ContactAdapter(private val numberList: ArrayList<ContactData>,
-                     private val editClick: (ContactData) -> Unit,
-                     private val deleteClick: (Int) -> Unit) :
+                     private val detailClick: (ContactData) -> Unit,
+                     private val deleteClick: (Int) -> Unit ) :
     RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
@@ -28,9 +28,9 @@ class ContactAdapter(private val numberList: ArrayList<ContactData>,
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         var currentItem = numberList[position]
         holder.itemView.setOnClickListener{
-            holder.detailLayout.visibility = if (holder.detailLayout.isVisible) View.GONE else View.VISIBLE
+            holder.foldedLayout.visibility = if (holder.foldedLayout.isVisible) View.GONE else View.VISIBLE
             holder.phoneNum.text = formatPhoneNumber(currentItem.phonenumber)
-            holder.editButton.setOnClickListener { editClick(currentItem) }
+            holder.detailButton.setOnClickListener { detailClick(currentItem) }
             holder.deleteButton.setOnClickListener { deleteClick(currentItem.id) }
         }
         holder.name.text = currentItem.name
@@ -54,9 +54,9 @@ class ContactAdapter(private val numberList: ArrayList<ContactData>,
     class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.item_name)
         val phoneNum: TextView = itemView.findViewById(R.id.item_num)
-        val detailLayout = itemView.findViewById<LinearLayout>(R.id.contact_detail_layout)
+        val foldedLayout = itemView.findViewById<LinearLayout>(R.id.contact_folded_layout)
         val deleteButton = itemView.findViewById<Button>(R.id.contact_delete_button)
-        val editButton = itemView.findViewById<Button>(R.id.contact_edit_button)
+        val detailButton = itemView.findViewById<Button>(R.id.contact_detail_button)
     }
 
 

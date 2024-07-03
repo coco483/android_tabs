@@ -1,14 +1,10 @@
 package com.example.viewactivitypractice.datas
 
-class ContactData() {
-    var id : Int = 0
-    var name : String = ""
-    var phonenumber: String = ""
-
-    constructor(id:Int, name:String, phonenumber: String) : this() {
-        this.id = id
-        this.name = name
-        this.phonenumber = phonenumber
-    }
+class ContactData(
+    val id : Int,
+    var name : String,
+    var phonenumber: String,
+    val imageId: Int? = null
+    ) {
     override fun toString(): String = this.name
 }

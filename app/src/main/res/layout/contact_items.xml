@@ -47,7 +47,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/contact_detail_layout"
+            android:id="@+id/contact_folded_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -81,12 +81,12 @@
                     android:textColor="@color/dark_purple" />
 
                 <Button
-                    android:id="@+id/contact_edit_button"
+                    android:id="@+id/contact_detail_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:text="EDIT"
+                    android:text="DETAIL"
                     android:textColor="@color/dark_purple" />
             </LinearLayout>
         </LinearLayout>

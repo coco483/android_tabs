@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:layout_marginTop="10dp"
-                android:completionThreshold="1"
+                android:completionThreshold="0"
                 android:dropDownAnchor="@+id/tag_AutoTV"
                 android:dropDownHeight="500dp"
                 android:ems="10"

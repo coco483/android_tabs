@@ -73,6 +73,7 @@ class ContactTab : Fragment() {
                 putInt("CONTACT_ID", contact.id)  // 가정: ContactData에 id 필드가 있다고 가정
                 putString("EXTRA_CONTACT_NAME", contact.name)
                 putString("EXTRA_CONTACT_PHONE",contact.phonenumber)
+                contact.imageId?.let { putInt("CONTACT_IMG_ID", it) }
             }
         }
         parentFragmentManager.beginTransaction()

@@ -14,27 +14,42 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.viewactivitypractice.DataBaseHandler
 import com.example.viewactivitypractice.R
+import com.example.viewactivitypractice.datas.ContactData
 import com.example.viewactivitypractice.datas.PostData
 import com.example.viewactivitypractice.fragments.ContactDetailPage
 
-class PostAdapter(private val myDB: DataBaseHandler, private val postList: ArrayList<PostData>, private val onClick: (PostData) -> Unit) :
+class PostAdapter(private val myDB: DataBaseHandler,
+                  private val postList: ArrayList<PostData>,
+                  private val detailClick: (PostData) -> Unit,
+                  private val deleteClick: ((Int) -> Unit)? = null ) :
     RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.post_items, parent, false)
-        return PostViewHolder(itemView, onClick)
+        return PostViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val currentItem = postList[position]
-        holder.itemView.setOnClickListener { onClick(currentItem) }
+        holder.itemView.setOnClickListener {
+            if (deleteClick !=null) {
+                holder.foldedLayout.visibility =
+                    if (holder.foldedLayout.isVisible) View.GONE else View.VISIBLE
+                holder.detailButton.setOnClickListener { detailClick(currentItem) }
+                holder.deleteButton.setOnClickListener { deleteClick?.let { it(currentItem.id) } }
+            } else { detailClick(currentItem) }
+        }
+
         holder.content.text = currentItem.content
         holder.date.text = currentItem.date
         val bitImg: Bitmap? = myDB.getImgById(currentItem.imageId)
@@ -120,10 +135,13 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
         return postList.size
     }
 
-    class PostViewHolder(itemView: View, onClick: (PostData) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val date: TextView = itemView.findViewById(R.id.item_text_date)
         val content: TextView = itemView.findViewById(R.id.item_text_content)
         val taggedName: TextView = itemView.findViewById(R.id.item_tag_text)
         val img: ImageView = itemView.findViewById(R.id.item_image_post)
+        val foldedLayout = itemView.findViewById<LinearLayout>(R.id.post_folded_layout)
+        val deleteButton = itemView.findViewById<Button>(R.id.post_delete_button)
+        val detailButton = itemView.findViewById<Button>(R.id.post_detail_button)
     }
 }

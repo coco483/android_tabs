@@ -5,32 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/name_ET"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="12"
-            android:hint="이름을 입력하세요"
-            android:inputType="text"
-            android:text="" />
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="80dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/phoneNum_ET"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:ems="12"
-            android:hint="전화번호를 입력하세요"
-            android:inputType="number"
-            android:maxLength="11"
-            android:text="" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/contact_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintBottom_toTopOf="@+id/content_ET"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            <EditText
+                android:id="@+id/name_ET"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:hint="이름을 입력하세요"
+                android:inputType="text"
+                android:text="" />
+
+            <EditText
+                android:id="@+id/phoneNum_ET"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:ems="12"
+                android:hint="전화번호를 입력하세요"
+                android:inputType="number"
+                android:maxLength="11"
+                android:text="" />
+        </LinearLayout>
+    </ScrollView>
 
 
     <LinearLayout
