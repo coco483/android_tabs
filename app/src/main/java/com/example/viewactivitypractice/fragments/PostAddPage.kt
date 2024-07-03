@@ -5,20 +5,12 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -34,7 +26,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import com.example.viewactivitypractice.DataBaseHandler
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
@@ -82,10 +73,8 @@ class PostAddPage : Fragment() {
         // autocomplete tag search
         val tagIdSet : MutableSet<Int> = mutableSetOf()
         val tagList = view.findViewById<TextView>(R.id.tag_list_TV)
-        /*var tagText = tagList.text.toString()
-        tagList.setText("")*/
-        val tagSpannable = SpannableStringBuilder()
-        val existingText = tagList.text
+        var tagText = tagList.text.toString()
+        tagList.setText("")
 
         val tagListStrList : ArrayList<String> = arrayListOf()
         val tagAutoComplete = view.findViewById<AutoCompleteTextView>(R.id.tag_AutoTV)
@@ -94,73 +83,13 @@ class PostAddPage : Fragment() {
         tagAutoComplete.setAdapter(tagAdapter)
         tagAutoComplete.setOnItemClickListener { parent, _, position, _ ->
             val item = parent.getItemAtPosition(position)
-            val spannable = SpannableStringBuilder()
             if (item is ContactData) {
-
                 Log.d("PostTag", "clicked ${item.name}")
                 tagListStrList.add(item.name)
-                tagIdSet.add(item.id)/*
-                tagText += ("@"+ item.name + " ")*/
-                // spannable
-
-                val start = spannable.length
-                spannable.append("@${item.name}")
-
-                // Apply styles
-                spannable.setSpan(
-                    StyleSpan(Typeface.ITALIC),
-                    start,
-                    spannable.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                spannable.setSpan(
-                    ForegroundColorSpan(Color.BLUE),
-                    start,
-                    spannable.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                spannable.setSpan(
-                    UnderlineSpan(),
-                    start,
-                    spannable.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                // Apply ClickableSpan
-                spannable.setSpan(
-                    object : ClickableSpan() {
-                        override fun onClick(widget: View) {
-                            val context = widget.context
-                            if (context is FragmentActivity) {
-                                val contactDetailFragment = ContactDetailPage().apply {
-                                    arguments = Bundle().apply {
-                                        putInt("CONTACT_ID", item.id)
-                                        putString("EXTRA_CONTACT_NAME", item.name)
-                                        putString("EXTRA_CONTACT_PHONE", item.phonenumber)
-                                        item.imageId?.let { putInt("CONTACT_IMG_ID", it) }
-                                    }
-                                }
-                                (context as MainActivity).updateBottomNavigationView(R.id.tab1)
-                                context.supportFragmentManager.beginTransaction()
-                                    .replace(R.id.blank_container, contactDetailFragment)
-                                    .addToBackStack(null)
-                                    .commit()
-
-
-                            } // if
-                        } // onClick
-                    },
-                    start,
-                    spannable.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                ) // setSpan
-                Log.d("checkClickStart", "start: $start")
-
-                spannable.append(" ")
-            } // if item check end
-
-            tagSpannable.append(spannable)
-            tagList.text = tagSpannable
-            tagList.movementMethod = LinkMovementMethod.getInstance()
+                tagIdSet.add(item.id)
+                tagText += ("@"+ item.name + " ")
+                tagList.text = tagText
+            }
             tagAutoComplete.text = null
 
         }
