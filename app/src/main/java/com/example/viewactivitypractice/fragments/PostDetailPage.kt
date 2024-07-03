@@ -124,7 +124,7 @@ class PostDetailPage : Fragment() {
             } else {
                 val imgPath = bitImg?.let{bitimg -> saveBitmapToInternalStorage(requireContext(),bitimg) }
                 imgId = imgPath?.let { it1 -> myDB.insertImg(it1).toInt() }
-                myDB.updatePost(PostData(postId, newContent, "")) // 연락처 업데이트
+                myDB.updatePost(PostData(postId, newContent, ""), tagIdSet) // 연락처 업데이트
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab())
                     .commit() // 변경 사항 반영
             }

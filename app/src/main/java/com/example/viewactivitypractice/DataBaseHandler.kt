@@ -268,7 +268,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun updatePost(post:PostData) {
+    fun updatePost(post:PostData, tagIdSet: Set<Int>) {
         val db = this.writableDatabase
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
@@ -276,11 +276,11 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         postValues.put(POST_CONTENT, post.content)
         postValues.put(POST_DATE, current)
         post.imageId?.let {postValues.put(POST_IMG_ID, it)}
-        //postValues.put(POST_IMG_ID, post.imageId)
         db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(post.id.toString()))
-        db.close()
-
         deleteTagByPostId(post.id)
+        for (tagId in tagIdSet) insertTag(post.id, tagId)
+        //postValues.put(POST_IMG_ID, post.imageId)
+        db.close()
         // for (contactId in post.tagIdList) insertTag(post.id, contactId)
     }
     fun deletePostById(postId: Int) {

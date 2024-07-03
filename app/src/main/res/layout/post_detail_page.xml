@@ -93,8 +93,10 @@
             android:id="@+id/post_delete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/dark_purple"
             android:gravity="center"
-            android:text="Delete" />
+            android:text="DELETE" />
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -104,8 +106,10 @@
             android:id="@+id/post_Edit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/dark_purple"
             android:gravity="center"
-            android:text="Edit" />
+            android:text="EDIT" />
 
     </LinearLayout>
 
