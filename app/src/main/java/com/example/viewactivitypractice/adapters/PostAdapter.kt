@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.viewactivitypractice.DataBaseHandler
+import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.datas.PostData
 import com.example.viewactivitypractice.fragments.ContactDetailPage
@@ -96,11 +97,15 @@ class PostAdapter(private val myDB: DataBaseHandler, private val postList: Array
                                             putString("EXTRA_CONTACT_PHONE", contact.phonenumber)
                                         }
                                     }
-                                    context.supportFragmentManager.beginTransaction()
+                                (context as MainActivity).updateBottomNavigationView(R.id.tab1)
+                                context.supportFragmentManager.beginTransaction()
                                         .replace(R.id.blank_container, contactDetailFragment)
                                         .addToBackStack(null)
                                         .commit()
-                            } // fragment 검사
+
+
+
+                            } // if
                         } // onClick
                     },
                     start,
