@@ -64,7 +64,7 @@ class ContactTab : Fragment() {
         recyclerView = view.findViewById(R.id.numRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = ContactAdapter(contactDatas, gotoContactDetail, deleteContact)
+        recyclerView.adapter = ContactAdapter(myDB, contactDatas, gotoContactDetail, deleteContact)
     }
     val gotoContactDetail: (ContactData) -> Unit = {contact ->
         // 클릭된 아이템의 연락처 정보를 ContactDetailPage 프래그먼트에 전달

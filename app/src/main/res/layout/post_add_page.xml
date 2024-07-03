@@ -13,7 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="80dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:gravity="center"
@@ -48,7 +48,8 @@
             <EditText
                 android:id="@+id/content_ET"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
                 android:layout_marginBottom="10dp"
                 android:ems="10"
                 android:hint="Content"
@@ -63,9 +64,11 @@
             <AutoCompleteTextView
                 android:id="@+id/tag_AutoTV"
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
                 android:layout_marginTop="10dp"
-                android:completionThreshold="0"
+                android:layout_marginBottom="80dp"
+                android:completionThreshold="1"
                 android:dropDownAnchor="@+id/tag_AutoTV"
                 android:dropDownHeight="500dp"
                 android:ems="10"

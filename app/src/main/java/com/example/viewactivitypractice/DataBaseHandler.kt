@@ -124,7 +124,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(CONTACT_ID))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
                 val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_PHONENUM))
-                val contact = ContactData(id, name, phonenumber)
+                val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(CONTACT_IMG_ID))
+                val contact = ContactData(id, name, phonenumber, imageId)
                 contactList.add(contact)
                 Log.d("ContactDB", "searched $name, $phonenumber")
             } while (cursor.moveToNext())
@@ -147,36 +148,6 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         db.close()
         return contact
-    }
-    fun getContactNameList(contactIdList: ArrayList<Int>): String{
-        var contactNameList = arrayListOf<String>()
-        val db = readableDatabase
-        val query = ("SELECT * FROM $CONTACT_TABLE_NAME WHERE $CONTACT_ID = ?")
-        for (contactId in contactIdList){
-            val cursor = db.rawQuery(query, arrayOf(contactId.toString()))
-            if (cursor.moveToFirst()) {
-                val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
-                contactNameList.add(name)
-            }
-            cursor.close()
-        }
-        db.close()
-        return contactNameList.joinToString(separator = ", ") { "@$it" }
-    }
-    fun getContactNameArrayList(contactIdList: ArrayList<Int>): ArrayList<String>{
-        var contactNameList = arrayListOf<String>()
-        val db = readableDatabase
-        val query = ("SELECT * FROM $CONTACT_TABLE_NAME WHERE $CONTACT_ID = ?")
-        for (contactId in contactIdList){
-            val cursor = db.rawQuery(query, arrayOf(contactId.toString()))
-            if (cursor.moveToFirst()) {
-                val name = cursor.getString(cursor.getColumnIndexOrThrow(CONTACT_NAME))
-                contactNameList.add(name)
-            }
-            cursor.close()
-        }
-        db.close()
-        return contactNameList
     }
 
     fun getAllContact(): ArrayList<ContactData>{
