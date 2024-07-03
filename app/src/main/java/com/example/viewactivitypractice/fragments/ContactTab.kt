@@ -59,6 +59,7 @@ class ContactTab : Fragment() {
 
         setRecyclerView(view, contactDataList)
     }
+
     fun setRecyclerView(view: View, contactDatas: ArrayList<ContactData>){
         recyclerView = view.findViewById(R.id.numRecycler)
         recyclerView.layoutManager = LinearLayoutManager(context)

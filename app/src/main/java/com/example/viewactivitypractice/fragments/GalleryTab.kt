@@ -12,15 +12,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.viewactivitypractice.DataBaseHandler
 import com.example.viewactivitypractice.MainActivity
 import com.example.viewactivitypractice.R
 import com.example.viewactivitypractice.adapters.ImageAdapter
+import com.example.viewactivitypractice.adapters.PostAdapter
 import com.example.viewactivitypractice.datas.ImageData
+import com.example.viewactivitypractice.datas.PostData
 import com.example.viewactivitypractice.uriToBitmap
 import java.io.InputStream
 
@@ -52,14 +56,36 @@ class GalleryTab : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         imgDataInitialize()
         recyclerView = view.findViewById(R.id.img_recyclerview)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = ImageAdapter(imgDataList)
+        recyclerView.adapter = ImageAdapter(imgDataList) { imageData ->
+            val post = myDB.getPostByImageId(imageData.id)
+            if (post != null) {
+                openPostDetailFragment(post)
+            } else {
+                Toast.makeText(requireContext(), "관련 포스트를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
 
     private fun imgDataInitialize() {
         imgDataList = myDB.getAllImg()
     }
 
-
+    private fun openPostDetailFragment(post: PostData) {
+        val postDetailFragment = PostDetailPage().apply {
+            arguments = Bundle().apply {
+                putInt("POST_ID", post.id)
+                putString("POST_CONTENT", post.content)
+                putString("POST_DATE", post.date)
+                post.imageId?.let { putInt("POST_IMG_ID", it) }
+            }
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.blank_container, postDetailFragment)
+            .addToBackStack(null)
+            .commit()
+    }
 }
