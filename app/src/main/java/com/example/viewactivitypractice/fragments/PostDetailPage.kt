@@ -76,7 +76,7 @@ class PostDetailPage : Fragment() {
         view.findViewById<EditText>(R.id.content_ET).setText(postContent)
 
         imgView = view.findViewById<ImageView>(R.id.post_imageView)
-        val bitImg = myDB.getImgById(postImgId)
+        bitImg = myDB.getImgById(postImgId)
         bitImg?.let { img -> imgView.setImageBitmap(img) }
 
         // autocomplete tag search
@@ -122,6 +122,7 @@ class PostDetailPage : Fragment() {
                     val imgPath = bitImg?.let { bitimg -> saveBitmapToInternalStorage(requireContext(), bitimg) }
                     postImgId?.let { myDB.deleteImgById(it) }
                     imgId = imgPath?.let { myDB.insertImg(it).toInt() }
+                    Log.d("PostDetailImg", "isImgChanged: $isImageChanged, bitImg: $bitImg imgPath: $imgPath imgId: $imgId")
                 }
                 myDB.updatePost(PostData(postId, newContent, "", imgId), tagIdSet)
                 parentFragmentManager.beginTransaction().replace(R.id.blank_container, PostTab()).commit()

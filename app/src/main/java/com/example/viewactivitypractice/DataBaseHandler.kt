@@ -88,9 +88,9 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 $POSTTAG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $POSTTAG_POST_ID INTEGER,
                 $POSTTAG_CONTACT_ID INTEGER,
-                FOREIGN KEY ($POSTTAG_POST_ID) REFERENCES $POST_TABLE_NAME($POST_ID),
-                FOREIGN KEY ($POSTTAG_CONTACT_ID) REFERENCES $CONTACT_TABLE_NAME($CONTACT_ID)
-            )
+                $POSTTAG_POST_ID INTEGER,
+                $POSTTAG_CONTACT_ID INTEGER
+            );
         """.trimIndent()
         db.execSQL(CREATE_POST_TAGS_TABLE)
     }
@@ -173,6 +173,8 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
     // 연락처 삭제
     fun deleteContactById(contactId: Int) {
+        val contact = getContactByContactId(contactId)
+        contact?.imageId?.let { deleteImgById(it) }
         val db = this.writableDatabase
         db.delete(CONTACT_TABLE_NAME, "id = ?", arrayOf(contactId.toString()))
         db.close()
@@ -267,19 +269,17 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         val db = this.writableDatabase
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val current = LocalDateTime.now().format(formatter)
-
+        Log.d("PostDBUpdate","imgid: ${post.imageId}")
         val postValues = ContentValues()
         postValues.put(POST_CONTENT, post.content)
         postValues.put(POST_DATE, current)
         post.imageId?.let {
-            postValues.put(POST_IMG_ID, it)
-        }
+            Log.d("PostDBUpdate","IN LET, imgid: ${it}")
+            postValues.put(POST_IMG_ID, it) }
         db.update(POST_TABLE_NAME, postValues, "id = ?", arrayOf(post.id.toString()))
+        db.close()
         deleteTagByPostId(post.id)
         for (tagId in tagIdSet) insertTag(post.id, tagId)
-        //postValues.put(POST_IMG_ID, post.imageId)
-        db.close()
-        // for (contactId in post.tagIdList) insertTag(post.id, contactId)
     }
     // 포스트 삭제
     fun deletePostById(postId: Int) {
@@ -394,7 +394,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
                 val imageId = cursor.getInt(cursor.getColumnIndexOrThrow(POST_IMG_ID))
 
                 val post = PostData(postId, content, date,/*tagList, */imageId)
-                postList.add(post)
+                postList.add(0, post)
             } while (cursor.moveToNext())
         }
 
